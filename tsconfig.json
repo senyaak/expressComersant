@@ -1,4 +1,15 @@
 {
+  "compilerOptions": {
+    "target": "es5"
+  },
+  "files": [
+    "src/app.ts"
+  ],
+  "filesGlob": [
+    "src/**/*.ts",
+    "src/*.ts",
+    "!node_modules"
+  ],
   "compileOnSave": false,
   "buildOnSave": false
 }
