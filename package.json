@@ -9,6 +9,7 @@
     "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
     "gulp-connect": "^5.0.0",
+    "gulp-develop-server": "^0.5.2",
     "gulp-livereload": "^3.8.1",
     "gulp-typescript": "^2.13.6"
   },
