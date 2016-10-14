@@ -3,11 +3,13 @@
     "target": "es5"
   },
   "files": [
-    "src/app.ts"
+    "src/**/*.ts",
+    "typings/**/*.d.ts"
   ],
   "filesGlob": [
     "src/**/*.ts",
     "src/*.ts",
+    "typings/**/*.d.ts",
     "!node_modules"
   ],
   "compileOnSave": false,
