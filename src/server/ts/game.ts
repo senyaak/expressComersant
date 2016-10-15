@@ -33,7 +33,7 @@ class Dices {
   public static rollDices(): number {
     var rolled: number = 0;
     for(var i = 0;i < Dices.dicesCounter; i++) {
-      rolled += Math.floor(Math.random() * 6);
+      rolled += (Math.floor(Math.random() * 6) + 1);
     }
     return rolled;
   };
