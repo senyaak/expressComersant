@@ -2,19 +2,30 @@ var gulp = require('gulp');
 var clean = require('gulp-clean');
 var ts = require('gulp-typescript');
 var server = require('gulp-develop-server');
-var tsConf = {
-  moduleResolution: 'node',
+var tsConfServer = {
   target: 'es5',
-  noImplicitAny: false,
-  rootDir: 'src/'
+  noImplicitAny: false
 };
+var tsConfClient = {
+  target: 'es5',
+  noImplicitAny: false
+};
+var tsProjectServer = ts.createProject('tsconfig.json', tsConfServer);
+// var tsProjectClient = ts.createProject('tsconfig.json', tsConfClient);
 
-var tsProject = ts.createProject('tsconfig.json', tsConf);
+gulp.task('default', ['public', 'compile:client'], function () {
+  return;
+});
 
-gulp.task('default', ['public'], function () {
-  return tsProject.src()
-    .pipe(ts(tsProject))
-    .js.pipe(gulp.dest('built'));
+gulp.task('compile:server', ['clean'], function () {
+  return gulp.src(['src/server/**/*.ts', 'typings/index.d.ts'])
+    .pipe(ts(tsConfServer))
+    .js.pipe(gulp.dest('built/server/'));
+});
+gulp.task('compile:client', ['compile:server'], function () {
+  return gulp.src(['src/client/**/*.ts', 'typings/index.d.ts'])
+  .pipe(ts(tsConfClient))
+  .js.pipe(gulp.dest('built/client/'));
 });
 
 gulp.task('watch', ['default'], function () {
@@ -36,7 +47,7 @@ gulp.task('server:restart', ['default'], function () {
 });
 
 gulp.task('clean', function () {
-  return gulp.src('build/', {read: false})
+  return gulp.src('built/**/*', {read: false})
     .pipe(clean());
 });
 
