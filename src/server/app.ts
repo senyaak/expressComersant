@@ -1,15 +1,13 @@
-
-// http.createServer(app).listen(3000, "localhost", () => {
-//   console.log('server')
-// });
-console.log('server');
-
+/// <reference path="./ts/game.ts"/>
 import * as express from 'express';
 import * as http from 'http';
 import * as fs from 'fs';
 import * as path from 'path';
+import Game from "./ts/game";
 var conf = JSON.parse(fs.readFileSync('config/config.json', 'utf8'));
 
+var game = new Game();
+game.test();
 
 var app = express();
 app.use(express.static("built/client"));

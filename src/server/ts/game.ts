@@ -1,4 +1,4 @@
-class Game {
+export default class Game {
   /* TODO add fields
     private fields: Field[];
   */
@@ -13,6 +13,15 @@ class Game {
   private nextTurn() {};
   public isGameRunning(): boolean {
     return this.gameIsRunning;
+  };
+
+
+  public test() {
+    console.log('test');
+    var a = 4;
+    while(--a > 0) {
+      console.log('Roll:', Dices.rollDices());
+    }
   };
 }
 
@@ -35,11 +44,4 @@ class Dices {
       throw new Error("New dices counter isn't correct!");
     }
   };
-  static
-}
-
-console.log('test');
-var a = 4;
-while(--a > 0) {
-  console.log('Roll:', Dices.rollDices());
 }
