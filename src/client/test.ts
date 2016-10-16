@@ -1,5 +1,13 @@
 /// <reference path="../../typings/index.d.ts"/>
 
-import * as superagent from 'superagent';
+declare var superagent;
+type Superagent = typeof superagent;
 
-superagent.get('/testRequest')
+superagent.get('/testRequest').end((err, res) => {
+  if (err) {
+    console.log('error', err);
+  } else {
+    console.log(res);
+  }
+});
+superagent.get();
