@@ -7,7 +7,22 @@ import Game from "./ts/game";
 
 /* get config */
 var conf = JSON.parse(fs.readFileSync('config/config.json', 'utf8'));
+/* Test Class Game */
+var game = new Game(2);
 
+game.startGame();
+var i = 100;
+while(i-- > 80) {
+  if(game.getCurrStep() === 1) {
+    console.log('Start turn');
+  }
+  console.log(game.getPlayerInfo());
+  let currStep = game.getCurrStep();
+  game.nextAction(game.getCurrPlayerId());
+  if(game.getCurrStep() === 2) {
+    game.purchaseProp();
+  }
+}
 
 /* Create server */
 var app = express();
