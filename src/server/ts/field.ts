@@ -1,5 +1,7 @@
 /// <reference path="./player.ts"/>
 import Player from "./player";
+/// <reference path="./services/notification.ts"/>
+import NotificationService from "./services/notification";
 
 export default class Field {
   private fields: Cell[];
@@ -9,9 +11,9 @@ export default class Field {
       new FirmaCell(30000, 200, "Гастроном", 21000),
       new FirmaCell(32000, 250, "Кондитерский", 24000),
       new FirmaCell(34000, 300, "Хлебный", 26000),
-      new ChangeBallanveEvent(new MoneyEvent("Прибыль", "Поздравляем! Вы выйграли в лотерею 10 000", 10000)),
-      new ChangeBallanveEvent(new MoneyEvent("Штраф", "Вас оштрафовали на 12 000", 12000)),
-      new ChangeBallanveEvent(new MoneyEvent("Прибыль", "Поздравляем! Вы выйграли в лотерею 10 000", 10000))
+      new ChangeBallanceEvent(new MoneyEvent("Прибыль", "Поздравляем! Вы выйграли в лотерею 10 000", 10000)),
+      new ChangeBallanceEvent(new MoneyEvent("Штраф", "Вас оштрафовали на 25 000", -25000)),
+      new ChangeBallanceEvent(new MoneyEvent("Прибыль", "Поздравляем! Вы выйграли в лотерею 10 000", 10000))
     );
   };
   public callEvent(player: Player) {
@@ -39,7 +41,7 @@ export default class Field {
     }
   }
   public changeOwner(player: Player, propId: number) {
-
+    /* TODO */
   }
 }
 /* Main Super-Class */
@@ -58,11 +60,16 @@ abstract class EventCell extends Cell {
   public abstract onStep(player: Player);
 }
 
-class CardEvent extends EventCell {
+class Card extends EventCell {
+  eventArray: ((player: Player) => void)[]
+  constructor(eventArray: ((player: Player) => void)[]) {
+    super();
+    this.eventArray = eventArray;
+  };
   public onStep(player: Player) {};
 }
 
-class ChangeBallanveEvent extends EventCell {
+class ChangeBallanceEvent extends EventCell {
   private event: StepEvent;
   public onStep(player: Player){
     console.log('some money event');
@@ -76,6 +83,17 @@ class ChangeBallanveEvent extends EventCell {
 /* Events */
 abstract class StepEvent {
   public abstract dispatch(player: Player);
+}
+
+class CardEvent extends StepEvent {
+  private event: (player: Player) => void;
+  constructor(event: (player: Player) => void) {
+    super();
+    this.event = event;
+  };
+  public dispatch(player: Player) {
+    this.event(player);
+  }
 }
 
 class MoneyEvent extends StepEvent {
@@ -132,7 +150,6 @@ class FirmaCell extends PropertyCell {
   private static maxGrade: number = 4;
   private grade: number;
   private upgradePrice: number;
-  private owner: number; /* Player id */
   constructor(price: number, dividend: number, name: string, uPrice: number) {
     super(price, dividend, name);
     this.grade = 0;
@@ -151,3 +168,16 @@ class AreaCell extends PropertyCell {
     console.log('if no owner, offer to buy');
   };
 }
+
+
+/* */
+var mailArray = [
+  new CardEvent((player: Player) => {
+    NotificationService.sendNotification(player, "", "");
+  }),
+  new CardEvent((player: Player) => {
+
+  })
+];
+var surprizeArray = [];
+var riskArray = [];
