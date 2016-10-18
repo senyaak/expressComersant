@@ -1,9 +1,9 @@
 /// <reference path="./ts/game.ts"/>
+import Game from "./ts/game";
+
 import * as express from 'express';
-import * as http from 'http';
 import * as fs from 'fs';
 import * as path from 'path';
-import Game from "./ts/game";
 
 /* get config */
 var conf = JSON.parse(fs.readFileSync('config/config.json', 'utf8'));
