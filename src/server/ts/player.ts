@@ -6,13 +6,14 @@ export default class Player {
   private propertiesList: number[];
   private static idCounter: number = 0;
   private id: number;
+  private socketId: number;
   /* TODO add: Status(ENUM: racket, underProtection, basic?)
    *           properties: number[](cellsIndexes)
    *           credit: {remainingTime: number, credit}
    *           CollectableItems: {ENUM: "Г(buy city firma)", "Free from TAX-Visit", "Anti-racket"}[]
    *           events: {event: Function(MB), remainTurns: number}[]
    */
-  constructor(name: string) {
+  constructor(name: string, socket: number = null) {
     this.name = name;
     this.position = 0;
     this.haveToRest = false;
