@@ -309,5 +309,172 @@ var mailArray: CardEvent[] = [
     NotificationService.sendNotification(player, "Письмо", "Вам предоставлен президентский гранд 25000");
   })
 ];
-var surprizeArray = [];
 var riskArray = [];
+var surprizeArray: CardEvent[] = [
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(12000);
+    NotificationService.sendNotification(player, "Сюрприз", "Вы примеруетесь на 12000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setTax();
+    NotificationService.sendNotification(player, "Сюрприз", "Вас вызывают в налоговую службу");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    var newPosition = player.getPosition() - 5;
+    if(newPosition < 0) {
+      newPosition = field.getLength() + newPosition;
+    }
+    player.setPosition(newPosition);
+    NotificationService.sendNotification(player, "Сюрприз", "Вернитесь на 5 клеток назад");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setTax();
+    NotificationService.sendNotification(player, "Сюрприз", "Вас вызывают в налоговую службу");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(10000);
+    NotificationService.sendNotification(player, "Сюрприз", "Вы выйграли в 'Спринт' 10000");
+  }),
+  // new CardEvent((player: Player, field: Field) => {
+  //   NotificationService.sendNotification(player, "Сюрприз", "Определите клетку куда должен встать игрок справа");
+  // }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setPosition(field.getFieldId("Концертный зал"));
+    NotificationService.sendNotification(player, "Сюрприз", "Вам подарили билет в концертный зал");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setRest();
+    NotificationService.sendNotification(player, "Сюрприз", "Лечение в санатории 'Геленджик'");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(12000);
+    NotificationService.sendNotification(player, "Сюрприз", "Вы выйграли приз в телевикторине 12000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(25000);
+    NotificationService.sendNotification(player, "Сюрприз", "Вы примеруетесь на 25000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(25000);
+    NotificationService.sendNotification(player, "Сюрприз", "Вы примеруетесь на 25000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-8000);
+    NotificationService.sendNotification(player, "Сюрприз", "Заплатите штраф 8000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    var newPosition = player.getPosition() - 10;
+    if(newPosition < 0) {
+      newPosition = field.getLength() + newPosition;
+    }
+    player.setPosition(newPosition);
+    NotificationService.sendNotification(player, "Сюрприз", "Вернитесь на 10 клеток назад");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.makeDeal(8000, null);
+    NotificationService.sendNotification(player, "Сюрприз", "У вас родилась дочь. Все игроки дарят по 8000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-40000);
+    NotificationService.sendNotification(player, "Сюрприз", "Ограбленна касса на сумму 40000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    var newPosition = player.getPosition() + 5;
+    if(newPosition >= field.getLength()) {
+      newPosition = field.getLength() - newPosition;
+    }
+    player.setPosition(newPosition);
+    NotificationService.sendNotification(player, "Сюрприз", "Подвиньтесь на 5 клеток вперёд");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setPosition(field.getFieldId("Лужники"));
+    NotificationService.sendNotification(player, "Сюрприз", "Вы приглашены на концерт в лужниках");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(5000);
+    NotificationService.sendNotification(player, "Сюрприз", "Вам отдали карточный долг 5000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(5000);
+    NotificationService.sendNotification(player, "Сюрприз", "Вам отдали карточный долг 5000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(20000);
+    NotificationService.sendNotification(player, "Сюрприз", "Помощь от неизвестного доброжелателя 20000");
+  }),
+  // new CardEvent((player: Player, field: Field) => {
+  //   NotificationService.sendNotification(player, "Сюрприз", "Определите клетку куда должен встать игрок справа");
+  // }),
+  new CardEvent((player: Player, field: Field) => {
+    var newPosition = player.getPosition() + 10;
+    if(newPosition >= field.getLength()) {
+      newPosition = field.getLength() - newPosition;
+    }
+    player.setPosition(newPosition);
+    NotificationService.sendNotification(player, "Сюрприз", "Подвиньтесь на 10 клеток вперёд");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.makeDeal(10000, null);
+    NotificationService.sendNotification(player, "Сюрприз", "У вас юбилей. Все игроки дарят по 10000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(12000);
+    NotificationService.sendNotification(player, "Сюрприз", "Вы выйграли в 'Спортлото' 12000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(15000);
+    NotificationService.sendNotification(player, "Сюрприз", "Вам перевод 15000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-5000);
+    NotificationService.sendNotification(player, "Сюрприз", "Заплатите штраф 5000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setPosition(field.getFieldId("Институт культуры"));
+    NotificationService.sendNotification(player, "Сюрприз", "Посетите семинар в институте культуры");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(10000);
+    NotificationService.sendNotification(player, "Сюрприз", "Скачок курса акции приносит 10000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(8000);
+    NotificationService.sendNotification(player, "Сюрприз", "Прибыль с участия в аукционе 8000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-12000);
+    NotificationService.sendNotification(player, "Сюрприз", "Премируйте лучших сотрудников 12000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-8000);
+    NotificationService.sendNotification(player, "Сюрприз", "Расходы на корпоротив 8000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-10000);
+    NotificationService.sendNotification(player, "Сюрприз", "Неудачные инвестиции, убыток 10000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-5000);
+    NotificationService.sendNotification(player, "Сюрприз", "Упал курс доллара убытки 5000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-5000);
+    NotificationService.sendNotification(player, "Сюрприз", "Переезд в новый офис обходиться в 12000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-8000);
+    NotificationService.sendNotification(player, "Сюрприз", "Оплатите аренду офиса 8000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setRest();
+    NotificationService.sendNotification(player, "Сюрприз", "Отпуск на курортах краснодарского края");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(15000);
+    NotificationService.sendNotification(player, "Сюрприз", "Вы удачно сбыли антиквариат 15000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setPosition(field.getFieldId("Кафе"));
+    NotificationService.sendNotification(player, "Сюрприз", "Партнёры предложили вам встречу в кафе");
+  })
+];
