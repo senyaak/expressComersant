@@ -365,7 +365,7 @@ var mailArray: CardEvent[] = [
     NotificationService.sendNotification(player, "Письмо", "Вам предоставлен президентский гранд 25000");
   })
 ];
-var riskArray = [];
+
 var surprizeArray: CardEvent[] = [
   new CardEvent((player: Player, field: Field) => {
     player.changeBallance(12000);
@@ -532,5 +532,104 @@ var surprizeArray: CardEvent[] = [
   new CardEvent((player: Player, field: Field) => {
     player.setPosition(field.getFieldId("Кафе"));
     NotificationService.sendNotification(player, "Сюрприз", "Партнёры предложили вам встречу в кафе");
+  })
+];
+
+var riskArray: CardEvent[] = [
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-5000);
+    NotificationService.sendNotification(player, "Риск", "Сожалению вы рисковали и проиграли 5000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-8000);
+    NotificationService.sendNotification(player, "Риск", "У вас затопило склад убытки 8000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setPosition(field.getFieldId("Рынок"));
+    NotificationService.sendNotification(player, "Риск", "Посетите рынок");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(15000);
+    NotificationService.sendNotification(player, "Риск", "Теневой бизнес приносит прибыль 15000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-10000);
+    NotificationService.sendNotification(player, "Риск", "Штраф 10000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    field.removeRandomProperty(player, 3);
+    NotificationService.sendNotification(player, "Риск", "Одна из ваших организаций признана банкротом");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.addItem(PlayerItems.sequrityCard);
+    NotificationService.sendNotification(player, "Риск", "Ваше предприятие взято под охрану милиции");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(12000);
+    NotificationService.sendNotification(player, "Риск", "Прибыль 12000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setPosition(0);
+    NotificationService.sendNotification(player, "Риск", "Идите на старт");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(8000);
+    NotificationService.sendNotification(player, "Риск", "Ваш выйгрыш на скачках составил 8000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-25000);
+    NotificationService.sendNotification(player, "Риск", "Пожар на територии предприятия, убытки 25000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(15000);
+    NotificationService.sendNotification(player, "Риск", "Вы получили взятку 15000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-8000);
+    NotificationService.sendNotification(player, "Риск", "Вы подкупаете арбитражного судью 8000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(12000);
+    NotificationService.sendNotification(player, "Риск", "Серый импорт приносит доход 12000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-5000);
+    NotificationService.sendNotification(player, "Риск", "Ремонт автомобиля после ДТП 5000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setRest();
+    NotificationService.sendNotification(player, "Риск", "Вы переутомились, пора в отпуск");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setRest();
+    NotificationService.sendNotification(player, "Риск", "Необходимо срочное личение в следствии стресса");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setPosition(field.getFieldId("Совхоз"));
+    NotificationService.sendNotification(player, "Риск", "На утро после юбилея вы очнулись в совхозе");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-20000);
+    NotificationService.sendNotification(player, "Риск", "Вас уличили в мошенничестве, замять дело 20000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(12000);
+    NotificationService.sendNotification(player, "Риск", "Вложения в рекламу принесли доход 12000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(5000);
+    NotificationService.sendNotification(player, "Риск", "Прибыль 5000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.addItem(PlayerItems.sequrityCard);
+    NotificationService.sendNotification(player, "Риск", "Ваше предприятие взято под охрану милиции");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(15000);
+    NotificationService.sendNotification(player, "Риск", "Банк ошибся в вашу пользу 15000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    field.removeRandomProperty(player, 1);
+    NotificationService.sendNotification(player, "Риск", "Сгорел один из ваших фелиалов");
   })
 ];
