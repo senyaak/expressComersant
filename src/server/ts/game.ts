@@ -93,7 +93,15 @@ export class Game {
         currPlayer.setPosition(0);
       }
     }
-    this.field.callEvent(currPlayer);
+    try {
+      this.field.callEvent(currPlayer);
+    } catch (e) {
+      if(e instanceof NotEnoughMoneyError) {
+        /* TODO player loose */
+      } else {
+        console.log('ERROR! Unexpected extension');
+      }
+    }
   };
   private playerEndTurn() {
     if(++this.currentPlayer >= this.players.length) {
