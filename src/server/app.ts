@@ -1,5 +1,4 @@
-/// <reference path="./ts/game.ts"/>
-import Game from "./ts/game";
+import {Game} from "./ts/game";
 
 import * as express from 'express';
 import * as fs from 'fs';

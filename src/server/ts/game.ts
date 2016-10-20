@@ -1,7 +1,6 @@
-/// <reference path="./field.ts"/>
-import Field from "./field";
-/// <reference path="./player.ts"/>
-import Player from "./player";
+import {Field} from "./field";
+import {Player} from "./player";
+import {NotEnoughMoneyError} from "./player";
 
 class Steps {
   private currStep: number;
@@ -20,7 +19,7 @@ class Steps {
   }
 }
 
-export default class Game {
+export class Game {
   private field: Field;
   private currentPlayer: number;
   private players: Player[];

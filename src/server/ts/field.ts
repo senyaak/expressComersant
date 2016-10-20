@@ -1,9 +1,8 @@
-/// <reference path="./player.ts"/>
-import Player from "./player";
-/// <reference path="./services/notification.ts"/>
+import {Player} from "./player";
+import {PlayerItems} from "./player";
 import NotificationService from "./services/notification";
 
-export default class Field {
+export class Field {
   private fields: Cell[];
   constructor() {
     this.fields = [];

@@ -1,4 +1,12 @@
-export default class Player {
+import {Field} from "./field";
+
+export enum PlayerItems {
+   purchaseAllowance,
+   sequrityCard,
+   freeTax
+}
+
+export class Player {
   private name: string;
   private position: number;
   private haveToRest: boolean;
@@ -69,7 +77,7 @@ export default class Player {
 }
 
 
-class NotEnoughMoneyError extends Error {
+export class NotEnoughMoneyError extends Error {
   need: number;
   constructor(need: number, msg?: string) {
     super(msg);
