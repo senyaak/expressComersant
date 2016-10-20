@@ -50,7 +50,12 @@ export class Field {
       throw new Error('WRONG PROPERTY TO BUY');
     }
   }
-  public changeOwner(player: Player, propId: number) {
+  public getFieldId(name: string) {
+    return this.fields.indexOf(this.fields.filter((val) => {
+      return val.getName().toLowerCase() === name.toLowerCase();
+    })[0]);
+  }
+  public changeOwner(player: Player, propId: number, oldPlayer: Player = null) {
     /* TODO */
   }
 }
