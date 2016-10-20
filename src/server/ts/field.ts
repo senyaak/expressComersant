@@ -23,6 +23,15 @@ export class Field {
   public getLength(): number {
     return this.fields.length;
   }
+  public getDividends(id: number): number {
+    var field = this.fields[id];
+    if (field.isPurchasable()) {
+      var propField: PropertyCell = <PropertyCell>field;
+      return propField.getDividens();
+    } else {
+      throw new Error('Wrong id for dividends');
+    }
+  };
   public isPurchasable(player: Player, propId: number): boolean {
     if(this.fields[propId].isPurchasable()) {
       var field:PropertyCell = <PropertyCell>this.fields[propId];
