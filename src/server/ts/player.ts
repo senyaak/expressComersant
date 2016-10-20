@@ -77,6 +77,10 @@ export class Player {
       this.changeBallance(costs);
     }
   };
+  public removeProperty(index: number) {
+    var list = this.propertiesList;
+    list.splice(list.indexOf(index), 1);
+  };
   public getPropertiesList(): number[] {
     return this.propertiesList;
   };

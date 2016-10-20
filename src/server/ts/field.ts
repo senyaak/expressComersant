@@ -20,9 +20,20 @@ export class Field {
   public callEvent(player: Player) {
     this.fields[player.getPosition()].onStep(player, this.that);
   };
+  public removeRandomProperty(player: Player, grade: number) {
+    var props: number[] = [];
+    this.fields.forEach((value: Cell, index: number) => {
+      if(value instanceof FirmaCell && (<FirmaCell>value).getGrade() === grade) {
+        props.push(index);
+      }
+    });
+    var randomIndex = props[Math.floor(Math.random() * props.length)];
+    (<FirmaCell>this.fields[randomIndex]).removeOwner();
+    player.removeProperty(randomIndex);
+  };
   public getLength(): number {
     return this.fields.length;
-  }
+  };
   public getDividends(id: number): number {
     var field = this.fields[id];
     if (field.isPurchasable()) {
@@ -39,7 +50,7 @@ export class Field {
     } else {
       return false;
     }
-  }
+  };
   public purchaseProp(player: Player, propId: number) {
     var property: PropertyCell = <PropertyCell>this.fields[propId];
     if(this.fields[propId].isPurchasable() && player.getBallance() >= property.getPrice()) {
@@ -49,16 +60,17 @@ export class Field {
     } else {
       throw new Error('WRONG PROPERTY TO BUY');
     }
-  }
+  };
   public getFieldId(name: string) {
     return this.fields.indexOf(this.fields.filter((val) => {
       return val.getName().toLowerCase() === name.toLowerCase();
     })[0]);
-  }
+  };
   public changeOwner(player: Player, propId: number, oldPlayer: Player = null) {
     /* TODO */
-  }
+  };
 }
+
 /* Main Super-Class */
 abstract class Cell {
   public getName(): string {
@@ -154,19 +166,22 @@ abstract class PropertyCell extends Cell {
   };
   public isSold() {
     return this.ownerId !== null;
-  }
+  };
   public getOwner() {
     return this.ownerId;
+  };
+  public removeOwner() {
+    this.ownerId = null;
   }
   public getName() {
     return this.name;
-  }
+  };
   public setOwner(newOwnerId: number): number {
     return this.ownerId = newOwnerId;
-  }
+  };
   public getPrice() {
     return this.price;
-  }
+  };
   public abstract onStep();
   public abstract getDividens();
   public abstract getTax();
@@ -201,6 +216,15 @@ class FirmaCell extends PropertyCell {
     player.changeBallance(this.upgradePrice);
     this.grade++;
   };
+  public downgrade() {
+    if(this.grade > 1) {
+      throw new Error("UNABLE TO DOWNGRADE!");
+    }
+    this.grade--;
+  };
+  public getGrade(): number {
+    return this.grade;
+  }
   public getDividens(): number {
     return this.dividend[this.grade];
   };
