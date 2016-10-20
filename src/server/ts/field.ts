@@ -3,8 +3,10 @@ import {PlayerItems} from "./player";
 import NotificationService from "./services/notification";
 
 export class Field {
+  private that: Field;
   private fields: Cell[];
   constructor() {
+    this.that = this;
     this.fields = [];
     this.fields.push(
       new FirmaCell(30000, 200, "Гастроном", 21000),
@@ -16,7 +18,7 @@ export class Field {
     );
   };
   public callEvent(player: Player) {
-    this.fields[player.getPosition()].onStep(player);
+    this.fields[player.getPosition()].onStep(player, this.that);
   };
   public getLength(): number {
     return this.fields.length;
