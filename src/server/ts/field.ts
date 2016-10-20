@@ -61,34 +61,45 @@ export class Field {
 }
 /* Main Super-Class */
 abstract class Cell {
+  public getName(): string {
+    return null;
+  }
   public isPurchasable(): boolean {
     return this.purchasable;
   }
   protected purchasable: boolean;
-  public abstract onStep(player: Player);
+  public abstract onStep(player: Player, field: Field);
   constructor() {
     this.purchasable = false;
   };
 }
 /* Card and Events */
 abstract class EventCell extends Cell {
-  public abstract onStep(player: Player);
+  public abstract onStep(player: Player, field: Field);
+}
+
+class EmptyStep extends EventCell {
+  public onStep(player: Player, field: Field) {
+    return;
+  }
 }
 
 class Card extends EventCell {
-  eventArray: ((player: Player) => void)[]
-  constructor(eventArray: ((player: Player) => void)[]) {
+  events: CardEvent[];
+  constructor(events: CardEvent[]) {
     super();
-    this.eventArray = eventArray;
+    this.events = events;
   };
-  public onStep(player: Player) {};
+  public onStep(player: Player, field: Field) {
+    this.events[Math.floor(Math.random()) * this.events.length].dispatch(player, field);
+  };
 }
 
 class ChangeBallanceEvent extends EventCell {
   private event: StepEvent;
-  public onStep(player: Player){
+  public onStep(player: Player, field: Field){
     console.log('some money event');
-    this.event.dispatch(player);
+    this.event.dispatch(player, null);
   };
   constructor(event: StepEvent) {
     super();
@@ -97,17 +108,17 @@ class ChangeBallanceEvent extends EventCell {
 }
 /* Events */
 abstract class StepEvent {
-  public abstract dispatch(player: Player);
+  public abstract dispatch(player: Player, field: Field);
 }
 
 class CardEvent extends StepEvent {
-  private event: (player: Player) => void;
-  constructor(event: (player: Player) => void) {
+  private event: (player: Player, field: Field) => void;
+  constructor(event: (player: Player, field: Field) => void) {
     super();
     this.event = event;
   };
-  public dispatch(player: Player) {
-    this.event(player);
+  public dispatch(player: Player, field: Field) {
+    this.event(player, field);
   }
 }
 
@@ -121,24 +132,23 @@ class MoneyEvent extends StepEvent {
     this.headLine = headLine;
     this.deltaBallance = deltaBallance;
   };
-  public dispatch(player: Player) {
+  public dispatch(player: Player, field: Field) {
     /* TODO SEND MESSAGE */
     // showMessageFn();
     player.changeBallance(this.deltaBallance);
+    NotificationService.sendNotification(player, this.headLine, this.message);
   };
 }
 
 /* Properties */
 abstract class PropertyCell extends Cell {
-  private price: number;
+  protected price: number;
   private ownerId: number;
-  private dividend: number;
   private name: string;
-  constructor(price: number, dividend: number, name: string) {
+  constructor(price: number, name: string) {
     super();
     this.price = price;
     this.ownerId = null;
-    this.dividend = dividend;
     this.purchasable = true;
     this.name = name;
   };
@@ -158,6 +168,8 @@ abstract class PropertyCell extends Cell {
     return this.price;
   }
   public abstract onStep();
+  public abstract getDividens();
+  public abstract getTax();
 }
 
 class FirmaCell extends PropertyCell {
@@ -165,22 +177,51 @@ class FirmaCell extends PropertyCell {
   private static maxGrade: number = 4;
   private grade: number;
   private upgradePrice: number;
-  constructor(price: number, dividend: number, name: string, uPrice: number) {
-    super(price, dividend, name);
+  private dividend: number[];
+  private tax: number[];
+
+  constructor(price: number, dividend: number[], tax: number[], name: string, uPrice: number) {
+    super(price, name);
+    if(dividend.length !== tax.length && tax.length !== 4) {
+      throw new Error('wrong array length');
+    }
+    this.dividend = dividend;
+    this.tax = tax;
     this.grade = 0;
     this.upgradePrice = uPrice;
   };
   public onStep() {
+    /* TODO use NotificationService */
     console.log('if no owner, offer to buy,/ else getTax');
+  };
+  public upgrade(player: Player) {
+    if (this.grade >= 3) {
+      throw new Error('WRONG UPGRADE!!!');
+    }
+    player.changeBallance(this.upgradePrice);
+    this.grade++;
+  };
+  public getDividens(): number {
+    return this.dividend[this.grade];
+  };
+  public getTax(): number {
+    return this.tax[this.grade];
   };
 }
 
 class AreaCell extends PropertyCell {
-  constructor(price: number, dividend: number, name: string) {
-    super(price, dividend, name);
+  private dividend: number;
+  constructor(price: number, name: string) {
+    super(price, name);
   };
   public onStep() {
     console.log('if no owner, offer to buy');
+  };
+  public getDividens(): number {
+    return this.price * 0.1;
+  };
+  public getTax(): number {
+    return 1000;
   };
 }
 
