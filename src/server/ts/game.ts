@@ -32,13 +32,13 @@ export class Game {
     this.field = new Field();
     this.players = [];
     while(playerCounter-- > 0) {
-      this.players.push(new Player(`Player${pCounter - playerCounter}`));
+      this.players.push(new Player(`Player${pCounter - playerCounter}`, this.players));
     }
     this.stepsObject = new Steps();
   };
   public addPlayer(name: string) {
     if(!this.gameIsRunning) {
-      this.players.push(new Player(name));
+      this.players.push(new Player(name, this.players));
     }
   }
   public startGame() {

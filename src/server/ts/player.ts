@@ -7,6 +7,7 @@ export enum PlayerItems {
 }
 
 export class Player {
+  private allPlayers: Player[];
   private name: string;
   private position: number;
   private haveToRest: boolean;
@@ -21,13 +22,15 @@ export class Player {
    *           CollectableItems: {ENUM: "Г(buy city firma)", "Free from TAX-Visit", "Anti-racket"}[]
    *           events: {event: Function(MB), remainTurns: number}[]
    */
-  constructor(name: string, socket: number = null) {
+  constructor(name: string, allPlayers: Player[], socket: number = null) {
+    this.allPlayers = allPlayers;
     this.name = name;
     this.position = 0;
     this.haveToRest = false;
     this.momey = 250000;
     this.id = Player.idCounter++;
     this.propertiesList = [];
+    this.socketId = socket;
   };
 
   public getId() {
