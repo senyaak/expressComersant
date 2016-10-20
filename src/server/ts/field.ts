@@ -171,12 +171,142 @@ class AreaCell extends PropertyCell {
 
 
 /* */
-var mailArray = [
-  new CardEvent((player: Player) => {
-    NotificationService.sendNotification(player, "", "");
+var mailArray: CardEvent[] = [
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-1000);
+    NotificationService.sendNotification(player, "Письмо", "Оплатите телефонные переговоры 1 000");
   }),
-  new CardEvent((player: Player) => {
-
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-20000);
+    NotificationService.sendNotification(player, "Письмо", "Ремонт предприятий обходиться вам в 20 000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.addItem(PlayerItems.purchaseAllowance);
+    NotificationService.sendNotification(player, "Письмо", "Вам разрешено купить государственное предприятие");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(8000);
+    NotificationService.sendNotification(player, "Письмо", "Доход региональныйх фелиалов 8000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(25000);
+    NotificationService.sendNotification(player, "Письмо", "Получите наследство 25000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setPosition(field.getFieldId("Тюз"));
+    NotificationService.sendNotification(player, "Письмо", "Вам купили билеты на спектакль в тюз");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-15000);
+    NotificationService.sendNotification(player, "Письмо", "Регистрация организаций обходиться вам в 15000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-24000);
+    NotificationService.sendNotification(player, "Письмо", "Штраф за сокрытие доходов 24000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setPosition(field.getFieldId("театр оперы и балета"));
+    NotificationService.sendNotification(player, "Письмо", "Вам купили билеты в театр оперы и балета");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-5000);
+    NotificationService.sendNotification(player, "Письмо", "Штраф пожнадзору 5000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(15000);
+    NotificationService.sendNotification(player, "Письмо", "Вы выгодно сбыли товар 15000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(10000);
+    NotificationService.sendNotification(player, "Письмо", "Получите годовой % 10000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-8000);
+    NotificationService.sendNotification(player, "Письмо", "Оплатите штраф гаи 8000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-12000);
+    NotificationService.sendNotification(player, "Письмо", "Расходы на модернизаию производства 12000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-10000);
+    NotificationService.sendNotification(player, "Письмо", "Штраф за неуплату налогов 10000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(10000);
+    NotificationService.sendNotification(player, "Письмо", "Доход аренды приносит 10000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.addItem(PlayerItems.freeTax);
+    NotificationService.sendNotification(player, "Письмо", "Вы освобождены от посещения налоговой службы");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    surprizeArray[Math.floor(Math.random() * surprizeArray.length)].dispatch(player, field);
+    NotificationService.sendNotification(player, "Письмо", "Тащите карту сюрприз");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-18000);
+    NotificationService.sendNotification(player, "Письмо", "Канкуренты нанесли вам убыток 18000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setTax();
+    NotificationService.sendNotification(player, "Письмо", "Вас вызывают в налоговую службу");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-11000);
+    NotificationService.sendNotification(player, "Письмо", "Оплатите счёт 11000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setTax();
+    NotificationService.sendNotification(player, "Письмо", "Вас вызывают в налоговую службу");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.addItem(PlayerItems.freeTax);
+    NotificationService.sendNotification(player, "Письмо", "Вы освобождены от посещения налоговой службы");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-5000);
+    NotificationService.sendNotification(player, "Письмо", "Оплатите счёт 5000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(12000);
+    NotificationService.sendNotification(player, "Письмо", "Получите годовой % 12000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.addItem(PlayerItems.purchaseAllowance);
+    NotificationService.sendNotification(player, "Письмо", "Вам разрешено купить государственное предприятие");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-5000);
+    NotificationService.sendNotification(player, "Письмо", "Оплатите авиабилеты 5000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-10000);
+    NotificationService.sendNotification(player, "Письмо", "Заплатите налог на экспорт 10000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(-8000);
+    NotificationService.sendNotification(player, "Письмо", "Оплатите ремонт служебного транспорта 8000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setPosition(field.getFieldId("Ресторан"));
+    NotificationService.sendNotification(player, "Письмо", "Поситите банкет в ресторане");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    riskArray[Math.floor(Math.random() * surprizeArray.length)].dispatch(player, field);
+    NotificationService.sendNotification(player, "Письмо", "Тащите карту риск");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(10000);
+    NotificationService.sendNotification(player, "Письмо", "Получите дивиденты от прибыли 10000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(15000);
+    NotificationService.sendNotification(player, "Письмо", "Получите проценты по вкладам 15000");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.changeBallance(25000);
+    NotificationService.sendNotification(player, "Письмо", "Вам предоставлен президентский гранд 25000");
   })
 ];
 var surprizeArray = [];
