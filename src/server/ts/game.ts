@@ -93,7 +93,7 @@ export class Game {
   private playerRollDice() {
     var currPlayer = this.getCurrPlayer();
     var currPosition = currPlayer.getPosition();
-    var roll = Dices.rollDices();
+    var roll = Dices.rollDices().reduce((sum, val) => val+sum);
     while(roll-- > 0) {
       if(currPlayer.setPosition(currPlayer.getPosition() + 1) === (this.field.getLength())) {
         currPlayer.setPosition(0);
@@ -136,11 +136,11 @@ export class Game {
 /* little help classes */
 
 class Dices {
-  private static dicesCounter: number = 2;
-  public static rollDices(): number {
-    var rolled: number = 0;
+  private static dicesCounter: number = 3;
+  public static rollDices(count: number = Dices.dicesCounter): number[] {
+    var rolled: number[] = [];
     for(var i = 0;i < Dices.dicesCounter; i++) {
-      rolled += (Math.floor(Math.random() * 6) + 1);
+      rolled.push(Math.floor(Math.random() * 6) + 1);
     }
     return rolled;
   };
