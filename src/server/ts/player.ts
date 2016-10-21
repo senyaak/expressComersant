@@ -18,6 +18,7 @@ export class Player {
   private id: number;
   private socketId: number;
   private items: PlayerItems[];
+  private isRacketir: number;
   /* TODO add: Status(ENUM: racket) / if racket remove sequrity
    *           credit: {remainingTime: number, credit}
    *           CollectableItems: {ENUM: "Г(buy city firma)", "Free from TAX-Visit", "Anti-racket"}[]
@@ -34,6 +35,7 @@ export class Player {
     this.socketId = socket;
     this.items = [];
     this.payTax = false;
+    this.isRacketir = null;
   };
 
   public makeDeal(money: number, player: Player) {
@@ -94,7 +96,27 @@ export class Player {
     return this.position;
   };
   public setPosition(position: number): number {
+    if(this.isRacketir !== null && this.isRacketir > 0) {
+      this.calcRacketTime(Math.abs(this.position - position));
+    }
     return this.position = position;
+  };
+  private calcRacketTime(time: number) {
+    this.isRacketir -= time;
+    if (this.isRacketir < 0) {
+      this.isRacketir = 0;
+    }
+  }
+  public becomeRacketir(time: number) {
+    this.isRacketir = time;
+  };
+  public removeRackteStatus() {
+    if(this.isRacketir === 0) {
+      this.isRacketir = null;
+    }
+  };
+  public isRacket(): boolean {
+    return this.isRacketir === null? false: true;
   };
   public setRest() {
     this.rest = true;

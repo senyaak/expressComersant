@@ -185,6 +185,7 @@ abstract class PropertyCell extends Cell {
   public abstract onStep(player: Player);
   public abstract getDividens();
   public abstract getTax();
+  public abstract getTaxForRacket();
 }
 
 export class FirmaCell extends PropertyCell {
@@ -213,9 +214,15 @@ export class FirmaCell extends PropertyCell {
   public onStep(player: Player) {
     if (this.isSold()) {
       var foe = player.getFoe(this.getOwner())
-      player.makeDeal(-this.getTax(), foe);
-      NotificationService.sendNotification(player.getSocket(), "Затраты", `Заплатите игроку ${foe.getName()} ${this.getTax()}`);
-      NotificationService.sendNotification(foe.getSocket(), "Прибыль", `${player.getName()} платит вам ${this.getTax()}`);
+      var tax
+      if (!player.isRacket()) {
+        tax = -this.getTax();
+      } else {
+        tax = this.getTaxForRacket();
+      }
+      player.makeDeal(tax, foe);
+      NotificationService.sendNotification(player.getSocket(), "Аренда", `Заплатите игроку ${foe.getName()} ${Math.abs(tax)}`);
+      NotificationService.sendNotification(foe.getSocket(), "Аренда", `${player.getName()} платит вам ${Math.abs(tax)}`);
     } else {
       NotificationService.sendNotification(player.getSocket(), "Покупка", `Приобрести ${this.name}`);
     }
@@ -244,6 +251,10 @@ export class FirmaCell extends PropertyCell {
   public getTax(): number {
     return this.tax[this.grade];
   };
+  public getTaxForRacket(): number {
+    var grade = (this.grade / 2) === 1? 3: 1;
+    return this.tax[grade]/2;
+  };
 }
 
 class AreaCell extends PropertyCell {
@@ -259,6 +270,9 @@ class AreaCell extends PropertyCell {
   };
   public getTax(): number {
     return 1000;
+  };
+  public getTaxForRacket(): number {
+    return 500;
   };
 }
 
@@ -668,5 +682,11 @@ var riskArray: CardEvent[] = [
   new CardEvent((player: Player, field: Field) => {
     field.removeRandomProperty(player, 1);
     NotificationService.sendNotification(player, "Риск", "Сгорел один из ваших фелиалов");
+  })
+];
+
+var racketArr = [
+  new CardEvent((player: Player, field: Field) => {
+    player.becomeRacketir(field.getLength() * 2);
   })
 ];
