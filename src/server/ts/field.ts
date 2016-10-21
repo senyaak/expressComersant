@@ -125,6 +125,16 @@ export class Field {
   public changeOwner(player: Player, propId: number, oldPlayer: Player = null) {
     /* TODO */
   };
+  public removePlayer(playerId: number) {
+    this.fields.forEach((value: Cell, index: number, array: Cell[]) => {
+      if(value.isPurchasable()) {
+        var field = <PropertyCell>value;
+        if(field.getOwner() === playerId) {
+          field.removeOwner();
+        }
+      }
+    });
+  }
 }
 
 /* Main Super-Class */

@@ -66,22 +66,30 @@ export class Game {
     }
   };
   public nextAction(playerId: number, action?: Function): void {
-    if(playerId === this.currentPlayer) {
-      let currStep = this.stepsObject.getStep();
-      if(currStep === 1) {
-        this.playerAction(() => {
-          let currPlayer = this.getCurrPlayer();
-          console.log(`Player: ${currPlayer.getName()} Balance: ${currPlayer.getBallance()}`);
-        });
-      } else if(currStep === 2){
-        this.playerRollDice();
-      } else if(currStep === 3) {
-        this.playerEndTurn();
+    try {
+      if(playerId === this.currentPlayer) {
+        let currStep = this.stepsObject.getStep();
+        if(currStep === 1) {
+          this.playerAction(() => {
+            let currPlayer = this.getCurrPlayer();
+            console.log(`Player: ${currPlayer.getName()} Balance: ${currPlayer.getBallance()}`);
+          });
+        } else if(currStep === 2){
+          this.playerRollDice();
+        } else if(currStep === 3) {
+          this.playerEndTurn();
+        }
+        this.stepsObject.nextStep();
+      } else {
+        /* TODO new error class*/
+        throw Error("WWrong Player");
       }
-      this.stepsObject.nextStep();
-    } else {
-      /* TODO new error class*/
-      throw Error("WWrong Player");
+    } catch(e) {
+      if(e instanceof NotEnoughMoneyError) {
+        // this.getCurrPlayer().playerLose
+        this.field.removePlayer(this.currentPlayer);
+        this.players.splice(this.currentPlayer, 1);
+      }
     }
   };
 
