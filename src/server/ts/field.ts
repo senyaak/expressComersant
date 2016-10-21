@@ -99,7 +99,7 @@ export class Field {
       throw new Error('Wrong id for dividends');
     }
   };
-  public isPurchasable(player: Player, propId: number): boolean {
+  public canPurchase(player: Player, propId: number): boolean {
     if(this.fields[propId].isPurchasable()) {
       var field:PropertyCell = <PropertyCell>this.fields[propId];
       return !field.isSold() && (player.getBallance() >=  field.getPrice());

@@ -52,6 +52,19 @@ export class Game {
   protected getCurrPlayer(): Player {
     return this.players[this.currentPlayer];
   }
+  public getPosOfPlayer(playerId: number = this.currentPlayer): number {
+    return this.players[playerId].getPosition();
+  }
+  public buyCell(socketId: number): boolean {
+    var currPlayer: Player = this.getCurrPlayer();
+    var cellId = this.getPosOfPlayer();
+    if(currPlayer.isThatPlayer(socketId) && this.field.canPurchase(currPlayer, cellId)) {
+      this.field.purchaseProp(currPlayer, cellId);
+      return true;
+    } else {
+      return false;
+    }
+  };
   public nextAction(playerId: number, action?: Function): void {
     if(playerId === this.currentPlayer) {
       let currStep = this.stepsObject.getStep();
@@ -117,7 +130,7 @@ export class Game {
   public purchaseProp() {
     var currPlayer = this.getCurrPlayer();
     var position = this.getCurrPlayer().getPosition()
-    if(this.field.isPurchasable(currPlayer, position)) {
+    if(this.field.canPurchase(currPlayer, position)) {
       this.field.purchaseProp(currPlayer, position);
     } else {
       console.log('cannot purchase')

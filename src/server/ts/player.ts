@@ -149,6 +149,9 @@ export class Player {
     }
     this.items.splice(counter, 1);
   };
+  public isThatPlayer(socketId: number) {
+    return this.socketId === socketId;
+  };
 }
 
 export class NotEnoughMoneyError extends Error {
