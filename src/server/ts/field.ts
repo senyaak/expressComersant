@@ -1,6 +1,6 @@
 import {Player} from "./player";
 import {PlayerItems} from "./player";
-import NotificationService from "./services/notification";
+import {NotificationService} from "./services/notification";
 
 export class Field {
   private that: Field;
@@ -155,8 +155,8 @@ class MoneyEvent extends StepEvent {
 /* Properties */
 abstract class PropertyCell extends Cell {
   protected price: number;
-  private ownerId: number;
-  private name: string;
+  protected ownerId: number;
+  protected name: string;
   constructor(price: number, name: string) {
     super();
     this.price = price;
@@ -182,20 +182,21 @@ abstract class PropertyCell extends Cell {
   public getPrice() {
     return this.price;
   };
-  public abstract onStep();
+  public abstract onStep(player: Player);
   public abstract getDividens();
   public abstract getTax();
 }
 
-class FirmaCell extends PropertyCell {
+export class FirmaCell extends PropertyCell {
   private static gradeMultipliese: number[] = [1, 3, 12.5, 30];
   private static maxGrade: number = 4;
   private grade: number;
   private upgradePrice: number;
   private dividend: number[];
   private tax: number[];
+  private isStateProperty: boolean;
 
-  constructor(price: number, dividend: number[], tax: number[], name: string, uPrice: number) {
+  constructor(price: number, dividend: number[], tax: number[], name: string, uPrice: number, isStateProperty: boolean = false) {
     super(price, name);
     if(dividend.length !== tax.length && tax.length !== 4) {
       throw new Error('wrong array length');
@@ -204,8 +205,20 @@ class FirmaCell extends PropertyCell {
     this.tax = tax;
     this.grade = 0;
     this.upgradePrice = uPrice;
+    this.isStateProperty = isStateProperty;
   };
-  public onStep() {
+  public isStateProp() {
+    return this.isStateProperty;
+  }
+  public onStep(player: Player) {
+    if (this.isSold()) {
+      var foe = player.getFoe(this.getOwner())
+      player.makeDeal(-this.getTax(), foe);
+      NotificationService.sendNotification(player.getSocket(), "Затраты", `Заплатите игроку ${foe.getName()} ${this.getTax()}`);
+      NotificationService.sendNotification(foe.getSocket(), "Прибыль", `${player.getName()} платит вам ${this.getTax()}`);
+    } else {
+      NotificationService.sendNotification(player.getSocket(), "Покупка", `Приобрести ${this.name}`);
+    }
     /* TODO use NotificationService */
     console.log('if no owner, offer to buy,/ else getTax');
   };
@@ -238,7 +251,7 @@ class AreaCell extends PropertyCell {
   constructor(price: number, name: string) {
     super(price, name);
   };
-  public onStep() {
+  public onStep(player: Player) {
     console.log('if no owner, offer to buy');
   };
   public getDividens(): number {
