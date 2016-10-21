@@ -3,6 +3,7 @@ import {Game} from "./ts/game";
 import * as express from 'express';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as socket from 'socket.io';
 
 /* get config */
 var conf = JSON.parse(fs.readFileSync('config/config.json', 'utf8'));
@@ -43,3 +44,5 @@ const server = app.listen(conf.port, conf.host, () => {
   var port = server.address().port;
   console.log(`Listening on http://localhost:${port}\nAdress ${address}`);
 });
+/*set sockets */
+var io = socket(server)
