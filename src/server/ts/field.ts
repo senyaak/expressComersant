@@ -312,7 +312,7 @@ var mailArray: CardEvent[] = [
     NotificationService.sendNotification(player, "Письмо", "Штраф за сокрытие доходов 24000");
   }),
   new CardEvent((player: Player, field: Field) => {
-    player.setPosition(field.getFieldId("театр оперы и балета"));
+    player.setPosition(field.getFieldId("Театр оперы и балета"));
     NotificationService.sendNotification(player, "Письмо", "Вам купили билеты в театр оперы и балета");
   }),
   new CardEvent((player: Player, field: Field) => {
@@ -688,5 +688,24 @@ var riskArray: CardEvent[] = [
 var racketArr = [
   new CardEvent((player: Player, field: Field) => {
     player.becomeRacketir(field.getLength() * 2);
+    NotificationService.sendNotification(player, "Рэкет", "Желаете заняться рэкетом?");
   })
 ];
+
+var sleepArr = [
+  new CardEvent((player: Player, field: Field) => {
+    player.setRest();
+    NotificationService.sendNotification(player, "Лечение", "Вас положили в больницу");
+  }),
+  new CardEvent((player: Player, field: Field) => {
+    player.setRest();
+    NotificationService.sendNotification(player, "Отпус", "Отпуск на курортах краснодарского края");
+  })
+];
+
+var taxArr = [
+  new CardEvent((player: Player, field: Field) => {
+    player.setTax();
+    NotificationService.sendNotification(player, "Налоговая служба", "Вас вызвали в налоговую службу");
+  })
+]
