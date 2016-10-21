@@ -1,5 +1,5 @@
-import {Field} from "./field";
-import {Player} from "./player";
+import {Field, FirmaCell} from "./field";
+import {Player, PlayerItems} from "./player";
 import {NotEnoughMoneyError} from "./player";
 
 class Steps {
@@ -16,6 +16,9 @@ class Steps {
   };
   public getStep(): number {
     return this.currStep;
+  }
+  public resetSteps(): void {
+    this.currStep = 1;
   }
 }
 
@@ -77,11 +80,14 @@ export class Game {
     return this.stepsObject.getStep();
   };
 
-    private playerAction(callback) { /* what to do if u have Prop/Events */
+  private playerAction(callback) { /* what to do if u have Prop/Events */
     var currPlayer = this.getCurrPlayer();
-    if(currPlayer.getPropertiesList.length > 0) {
-      /* TODO ask for action */
-      console.log('ask for action');
+    var currField = this.field[currPlayer.getPosition()];
+    if (currField instanceof FirmaCell && (<FirmaCell>currField).isStateProp()) {
+      currPlayer.addItem(PlayerItems.purchaseAllowance);
+    } else if(currPlayer.haveToRest()) {
+      this.stepsObject.resetSteps();
+      this.playerEndTurn();
     }
   };
   private playerRollDice() {

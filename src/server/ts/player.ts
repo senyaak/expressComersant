@@ -47,6 +47,12 @@ export class Player {
       player.changeBallance(-money);
     }
   }
+  public getFoe(playerId: number): Player {
+    return this.allPlayers.filter(val => val.getId() === playerId)[0];
+  }
+  public getSocket(): number {
+    return this.socketId;
+  }
   public getId() {
     return this.id;
   };
@@ -93,7 +99,7 @@ export class Player {
   public setRest() {
     this.rest = true;
   };
-  public isSleeping() {
+  public haveToRest() {
     var sleep = this.rest;
     if(this.rest) {
       this.rest = false;
