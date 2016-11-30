@@ -5,6 +5,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as socket from 'socket.io';
 
+/* set gloval values */
+var playerPool = [];
+
 /* get config */
 var conf = JSON.parse(fs.readFileSync('config/config.json', 'utf8'));
 
@@ -28,4 +31,22 @@ const server = app.listen(conf.port, conf.host, () => {
   console.log(`Listening on http://localhost:${port}\nAdress ${address}`);
 });
 /*set sockets */
-var io = socket(server)
+var io: SocketIO.Server = socket(server);
+
+io.on('connection', (socket: SocketIO.Socket) => {
+  playerPool.push(socket.client.id);
+  socket.on('disconnect', () => {
+    /* remove player from pool by disconnect */
+    playerPool.forEach((id: string, index: number) => {
+      if(id === socket.client.id) {
+        playerPool.splice(index, 1);
+      };
+    });
+  });
+  /* if we have 2 player start game */
+  if(playerPool.length = 2) {
+    var game = new Game(playerPool);
+    socket.emit('startGame', "game started");
+  }
+  
+});
