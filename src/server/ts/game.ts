@@ -30,11 +30,17 @@ export class Game {
   private stepsObject: Steps;
 
   /* TODO explicit counter of players*/
-  public constructor(pCounter: number = 1) {
-    var playerCounter = pCounter;
+  public constructor(socketIds: string[]) {
+    if (socketIds.length < 1) {
+      throw new Error("Not enought players");
+    }
     this.field = new Field();
     this.players = [];
     this.stepsObject = new Steps();
+    socketIds.forEach((id, i) => {
+      this.addPlayer(`Player${i}`, id);
+    });
+    this.startGame();
   };
   public addPlayer(name: string, socketId: string) {
     if(!this.gameIsRunning) {
