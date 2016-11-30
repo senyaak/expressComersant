@@ -16,7 +16,7 @@ export class Player {
   private propertiesList: number[];
   private static idCounter: number = 0;
   private id: number;
-  private socketId: number;
+  private socketId: string;
   private items: PlayerItems[];
   private isRacketir: number;
   /* TODO add: Status(ENUM: racket) / if racket remove sequrity
@@ -24,7 +24,7 @@ export class Player {
    *           CollectableItems: {ENUM: "Г(buy city firma)", "Free from TAX-Visit", "Anti-racket"}[]
    *           events: {event: Function(MB), remainTurns: number}[]
    */
-  constructor(name: string, allPlayers: Player[], socket: number = null) {
+  constructor(name: string, allPlayers: Player[], socket: string) {
     this.allPlayers = allPlayers;
     this.name = name;
     this.position = 0;
@@ -52,7 +52,7 @@ export class Player {
   public getFoe(playerId: number): Player {
     return this.allPlayers.filter(val => val.getId() === playerId)[0];
   }
-  public getSocket(): number {
+  public getSocket(): string {
     return this.socketId;
   }
   public getId() {
@@ -149,7 +149,7 @@ export class Player {
     }
     this.items.splice(counter, 1);
   };
-  public isThatPlayer(socketId: number) {
+  public isThatPlayer(socketId: string) {
     return this.socketId === socketId;
   };
 }

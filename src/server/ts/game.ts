@@ -34,14 +34,11 @@ export class Game {
     var playerCounter = pCounter;
     this.field = new Field();
     this.players = [];
-    while(playerCounter-- > 0) {
-      this.players.push(new Player(`Player${pCounter - playerCounter}`, this.players));
-    }
     this.stepsObject = new Steps();
   };
-  public addPlayer(name: string) {
+  public addPlayer(name: string, socketId: string) {
     if(!this.gameIsRunning) {
-      this.players.push(new Player(name, this.players));
+      this.players.push(new Player(name, this.players, socketId));
     }
   }
   public startGame() {
@@ -55,7 +52,7 @@ export class Game {
   public getPosOfPlayer(playerId: number = this.currentPlayer): number {
     return this.players[playerId].getPosition();
   }
-  public buyCell(socketId: number): boolean {
+  public buyCell(socketId: string): boolean {
     var currPlayer: Player = this.getCurrPlayer();
     var cellId = this.getPosOfPlayer();
     if(currPlayer.isThatPlayer(socketId) && this.field.canPurchase(currPlayer, cellId)) {
@@ -148,7 +145,7 @@ export class Game {
     return this.gameIsRunning;
   };
   /* for debugging */
-  getPlayerInfo() {
+  public getPlayerInfo() {
     return `${this.getCurrPlayer().getName()}, Pos:${this.getCurrPlayer().getPosition()}, Props:${this.getCurrPlayer().getPropertiesList()}, Money:${this.getCurrPlayer().getBallance()}`;
   }
 }
