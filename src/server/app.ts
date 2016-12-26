@@ -23,7 +23,8 @@ app.get('/', (req:express.Request, res:express.Response) => {
   res.status(200).sendFile(path.resolve(__dirname + '/../client/index.html'));
 })
 app.use(express.static("built/client"));
-
+app.use(express.static("node_modules/svgjs/dist"));
+app.use(express.static("public"));
 /* start server */
 const server = app.listen(conf.port, conf.host, () => {
   var address = server.address().address;
