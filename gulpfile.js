@@ -8,7 +8,8 @@ var tsConfServer = {
 };
 var tsConfClient = {
   target: 'es5',
-  noImplicitAny: false
+  noImplicitAny: false,
+  out: 'test.js'
 };
 var tsProjectServer = ts.createProject('tsconfig.json', tsConfServer);
 // var tsProjectClient = ts.createProject('tsconfig.json', tsConfClient);
