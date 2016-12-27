@@ -1,19 +1,24 @@
 /// <reference path="../../typings/index.d.ts"/>
-/// <reference path="./field.ts"/>
 
 var socket = io();
-socket.emit('test', 'test value');
 
-socket.on('startGame', (val1,val2,val3) => {
-  /*create field*/
-  var mainSvg: svgjs.Element = SVG('game').size(
-    9000,//window.innerWidth, 
-    window.innerHeight
-  );
-  var mainGroup = mainSvg.group();
+var game: Game;
 
-  field.forEach((f,i) => {
-    f.createElement(mainGroup, i);
-  });
-  console.log(val1,val2,val3);
+socket.on('startGame', (gameId) => {
+  game = new Game(gameId);
+  socket.emit('leaveLobby', gameId, socket.id);
 });
+
+socket.on('lobby_created', (err) => {
+  if(App.state === AppStates.Lobby)
+  console.log('Lobby created. Errors:' + err);
+});
+
+window.onload = () => {
+  App.initApp(
+    document.getElementById('mainMenu'),
+    document.getElementById('gameList'),
+    document.getElementById('lobby'),
+    document.getElementById('game')
+  );
+}
