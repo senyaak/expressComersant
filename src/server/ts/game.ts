@@ -97,8 +97,11 @@ export class Game {
   };
 
   /* probably only for tests */
-  public getCurrPlayerId(): number {
+  public getCurrPlayerNumber(): number {
     return this.currentPlayer;
+  };
+  public getCurrPlayerId(): string {
+    return this.players[this.currentPlayer].getSocket();
   };
   public getCurrStep(): number {
     return this.stepsObject.getStep();

@@ -1,14 +1,40 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="svg.min.js"></script>
-  <script src="test.js "></script>
-</head>
-<body>
-  <div id="main-menu">
-  </div>
-  <div id="game">
-  </div>
-</body>
+  <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="svg.min.js"></script>
+    <script src="test.js "></script>
+  </head>
+  <body>
+    <!-- menu -->
+    <div id="mainMenu">
+      <ul class="menu">
+        <li id="createGame" class="menuElm">
+          Создать игру
+        </li>
+
+        <li id="findGame" class="menuElm">
+          Поиск игр...
+        </li>
+
+      </ul>
+    </div>
+
+    <!-- gameList -->
+    <div id="gameList">
+      <ul class="gameList">
+        <!-- LIST OF GAMES -->
+      </ul>
+    </div>
+
+    <!-- lobby -->
+    <div id="lobby">
+      <!-- players info -->
+    </div>
+
+    <!-- game -->
+    <div id="game">
+
+    </div>
+  </body>
 </html>
