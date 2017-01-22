@@ -28,6 +28,13 @@ export class Game {
   private players: Player[];
   private gameIsRunning: boolean;
   private stepsObject: Steps;
+  private gameId: string;
+
+  public set GameId(value: string) {
+    if(!this.gameId) {
+      this.gameId = value;
+    }
+  }
 
   /* TODO explicit counter of players*/
   public constructor(socketIds: string[]) {
@@ -68,9 +75,9 @@ export class Game {
       return false;
     }
   };
-  public nextAction(playerId: number, action?: Function): void {
+  public nextAction(playerSocket: string, action?: Function): void {
     try {
-      if(playerId === this.currentPlayer) {
+      if(playerSocket === this.players[this.currentPlayer].getSocket()) {
         let currStep = this.stepsObject.getStep();
         if(currStep === 1) {
           this.playerAction(() => {
