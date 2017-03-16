@@ -24,6 +24,7 @@ app.get('/', (req:express.Request, res:express.Response) => {
 });
 app.use(express.static("built/client"));
 app.use(express.static("node_modules/svgjs/dist"));
+app.use(express.static("node_modules/jquery/dist"));
 app.use(express.static("public"));
 
 app.get('/room/:room', (req, res) => {
