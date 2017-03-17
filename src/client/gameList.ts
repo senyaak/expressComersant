@@ -1,16 +1,15 @@
 class GameList {
   private static chosenRoom: string;
-  private static gameListDiv: HTMLElement;
+  private static gameListDiv: JQuery;
   public static get ChosenRoom(): string {
     return GameList.chosenRoom;
   }
-  public static init(gameList: HTMLElement) {
+  public static init(gameList: JQuery) {
     GameList.gameListDiv = gameList;
   }
 
   public static showRooms() {
     GameList.clear();
-    console.log('showRooms');
     socket.on('new_room', (roomName) => {
       GameList.AddRoom(roomName);
     });
@@ -23,16 +22,15 @@ class GameList {
   }
 
   private static AddRoom(roomName) {
-    var newRoom = document.createElement('DIV');
-    newRoom.textContent = `${roomName}`;
-    newRoom.setAttribute('name', roomName);
-    GameList.gameListDiv.appendChild(newRoom);
-    newRoom.onclick = () => {
-      console.log('JOIN ROOM', roomName)
+    GameList.gameListDiv.append(`<div id="room_${roomName}"></div>`);
+    var newRoom = $(`#room_${roomName}`);
+    newRoom.html(`${roomName}`);
+    newRoom.attr('name', roomName);
+    newRoom.click(() => {
       GameList.chosenRoom = roomName;
       socket.emit('join_room', roomName);
       App.State = AppStates.JOIN_LOBBY;
-    };
+    });
   }
 
   private static get Rooms(): Promise<string[]> {
@@ -48,8 +46,6 @@ class GameList {
 
   public static clear() {
     socket.off('new_room');
-    while(GameList.gameListDiv.firstChild) {
-      GameList.gameListDiv.removeChild(GameList.gameListDiv.firstChild);
-    }
+    GameList.gameListDiv.html('');
   }
 }

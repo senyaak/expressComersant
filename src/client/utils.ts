@@ -7,7 +7,6 @@ module Utils {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-          console.log(xmlHttp.responseText);
           callback(JSON.parse(xmlHttp.responseText));
         }
     }
@@ -15,18 +14,15 @@ module Utils {
     xmlHttp.send(null);
   }
 
-  export function appendMainMenuButton(container: HTMLElement, callback?: Function) {
-    var button = document.createElement('DIV');
-    button.textContent = `Выход`;
+  export function appendMainMenuButton(container: JQuery, callback?: Function) {
     // button.setAttribute('i', 'mainM');
-    container.appendChild(button);
-    button.onclick = () => {
-      console.log('JOIN ROOM');
+    container.append(`<button class="exit_btn">Выход</button>`);
+    $(container).find(`.exit_btn`).click(() => {
       App.State = AppStates.MENU;
       if(typeof callback == 'function') {
         callback();
       }
-    };
+    });
 
   }
 }

@@ -78,7 +78,7 @@ class FirmaCell extends Cell {
     this.name.split("\\n").forEach((text: string, i: number, arr) => {
       topElm.text(text).y(2 + ((LINE_HEIGHT+1)*i)).x(CELL_WIDTH/2).font({anchor: 'middle', size: LINE_HEIGHT});
       if(i+1 == arr.length) {
-        mainElement.text(`${withThousandSeparateDots(this.price)}`).y(2 + (LINE_HEIGHT+1)*(i+1)).x(CELL_WIDTH/2).font({anchor: 'middle', size: LINE_HEIGHT});
+        mainElement.text(`${Utils.withThousandSeparateDots(this.price)}`).y(2 + (LINE_HEIGHT+1)*(i+1)).x(CELL_WIDTH/2).font({anchor: 'middle', size: LINE_HEIGHT});
       }
     });
     var headerBP = (LINE_HEIGHT+1)*3;
@@ -91,7 +91,7 @@ class FirmaCell extends Cell {
                .y(CELL_HEIGHT - (LINE_HEIGHT+1)*(2))
                .x(CELL_WIDTH/2)
                .font({anchor: 'middle', size: LINE_HEIGHT});
-    mainElement.text(`${withThousandSeparateDots(this.upgrade)}`)
+    mainElement.text(`${Utils.withThousandSeparateDots(this.upgrade)}`)
                .y(CELL_HEIGHT - (LINE_HEIGHT+1))
                .x(CELL_WIDTH/2).font({anchor: 'middle', size: LINE_HEIGHT});
 
@@ -147,6 +147,7 @@ class Card extends Cell {
     return mainElement;
   }
 };
+
 class AreaCell extends Cell {
   private price;
   constructor(price: number) {
@@ -163,7 +164,7 @@ class AreaCell extends Cell {
     var footerBP = CELL_HEIGHT - (LINE_HEIGHT*5);
     var lineMargin = 4;
     this.drowLines(mainElement, footerBP, lineMargin);
-    mainElement.text(withThousandSeparateDots(this.price))
+    mainElement.text(Utils.withThousandSeparateDots(this.price))
                .y(footerBP + (CELL_HEIGHT - footerBP)/2)
                .x(CELL_WIDTH/2)
                .font({anchor: 'middle', size: LINE_HEIGHT});
@@ -186,6 +187,7 @@ class AreaCell extends Cell {
 
   }
 };
+
 class MoneyCell extends Cell {
   private money;
   constructor(money: number) {
@@ -213,7 +215,7 @@ class MoneyCell extends Cell {
                .y(CELL_HEIGHT*3/4)
                .x(CELL_WIDTH/2)
                .font({anchor: 'middle', size: LINE_HEIGHT});
-    mainElement.text(withThousandSeparateDots(Math.abs(this.money)))
+    mainElement.text(Utils.withThousandSeparateDots(Math.abs(this.money)))
                .y(CELL_HEIGHT/4)
                .x(CELL_WIDTH/2)
                .font({anchor: 'middle', size: LINE_HEIGHT});
@@ -222,7 +224,7 @@ class MoneyCell extends Cell {
   private positiv(mainElement: svgjs.Element) {
     mainElement.line(0, CELL_HEIGHT - LINE_HEIGHT, CELL_WIDTH, CELL_HEIGHT - LINE_HEIGHT).stroke({width: INNERBORDER_WIDTH, color: "#f00"});
     mainElement.line(0, CELL_HEIGHT - LINE_HEIGHT*3.5, CELL_WIDTH, CELL_HEIGHT - LINE_HEIGHT*3.5).stroke({width: INNERBORDER_WIDTH, color: "#f00"});
-    mainElement.text(withThousandSeparateDots(Math.abs(this.money)))
+    mainElement.text(Utils.withThousandSeparateDots(Math.abs(this.money)))
                .y(CELL_HEIGHT - LINE_HEIGHT*2.5)
                .x(CELL_WIDTH/2)
                .font({anchor: 'middle', size: LINE_HEIGHT});

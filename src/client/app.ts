@@ -8,10 +8,11 @@ enum AppStates {
 
 
 class App {
-  private static mainMenu: HTMLElement;
-  private static lobby: HTMLElement;
-  private static gameList: HTMLElement;
-  private static game: HTMLElement;
+  private static mainMenu: JQuery;
+  private static lobby: JQuery;
+  private static gameList: JQuery;
+  private static game: JQuery;
+
   private static isReady: boolean;
   private static state: AppStates;
 
@@ -42,17 +43,17 @@ class App {
   }
 
   public static initApp(
-    mainMenu: HTMLElement,
-    gameList: HTMLElement,
-    lobby: HTMLElement,
-    game: HTMLElement
+    mainMenu: JQuery,
+    gameList: JQuery,
+    lobby: JQuery,
+    game: JQuery
   ): void {
     //===========menu========//
     App.mainMenu = mainMenu;
-    mainMenu.querySelector('#createGame').addEventListener('click', () => {
+    mainMenu.find('#createGame').on('click', () => {
       App.State = AppStates.LOBBY;
     });
-    mainMenu.querySelector('#findGame').addEventListener('click', () => {
+    mainMenu.find('#findGame').on('click', () => {
       App.State = AppStates.GAME_LIST;
     });
     //=============game list==============//
@@ -71,24 +72,23 @@ class App {
   }
 
   private static hideAll() {
-    App.mainMenu.setAttribute('style', 'display: none;');
-    App.lobby.setAttribute('style', 'display: none;');
-    App.gameList.setAttribute('style', 'display: none;');
-    App.game.setAttribute('style', 'display: none;');
+    App.mainMenu.attr('style', 'display: none;');
+    App.lobby.attr('style', 'display: none;');
+    App.gameList.attr('style', 'display: none;');
+    App.game.attr('style', 'display: none;');
   }
 
   public static showMenu() {
-    App.mainMenu.setAttribute('style', 'display: block;');
+    App.mainMenu.attr('style', 'display: block;');
   }
 
   public static showGameList() {
-    App.gameList.setAttribute('style', 'display: block;');
+    App.gameList.attr('style', 'display: block;');
     GameList.showRooms();
   }
 
   public static showLobby(roomId?: string) {
-    App.lobby.setAttribute('style', 'display: block;');
-    console.log('showLobby', roomId)
+    App.lobby.attr('style', 'display: block;');
     if(roomId) {
       App.joinLobby(roomId);
     } else {

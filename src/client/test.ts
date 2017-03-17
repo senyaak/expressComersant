@@ -17,9 +17,9 @@ socket.on('lobby_created', (err) => {
 // init app class
 window.onload = () => {
   App.initApp(
-    document.getElementById('mainMenu'),
-    document.getElementById('gameList'),
-    document.getElementById('lobby'),
-    document.getElementById('game')
+    $('#mainMenu'),
+    $('#gameList'),
+    $('#lobby'),
+    $('#game')
   );
 };

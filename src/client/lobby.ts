@@ -6,12 +6,11 @@ interface PlayersList {
 }
 
 class Lobby {
-  private static players: { [key:string]: HTMLElement};
-  private static lobbyDiv: HTMLElement;
+  private static players: { [key:string]: JQuery};
+  private static lobbyDiv: JQuery;
   private static lobbyId: string;
 
-  public static init(lobbyDiv: HTMLElement) {
-    console.log('create lobby', lobbyDiv);
+  public static init(lobbyDiv: JQuery) {
     Lobby.players = {};
     Lobby.lobbyDiv = lobbyDiv;
   }
@@ -59,24 +58,28 @@ class Lobby {
     if (!Lobby.players[name]) {
       throw new Error("Player not found in lobby!");
     }
-    for(var key in Lobby.lobbyDiv.children) {
-      console.log('1',Lobby.lobbyDiv.children[key]);
-      if(Lobby.lobbyDiv.children[key].getAttribute('name') === name) {
-        delete Lobby.players[name];
-        Lobby.lobbyDiv.removeChild(Lobby.lobbyDiv.children[key]);
-        break;
-      }
-    }
+
+    $(Lobby.lobbyDiv).children(`[name*=${name}]`).each((index: number, elem: Element) => {
+      delete Lobby.players[name];
+      $(elem).remove();
+    });
+    // for(var key in Lobby.lobbyDiv.children) {
+    //   console.log('1',Lobby.lobbyDiv.children[key]);
+    //   if(Lobby.lobbyDiv.children[key].getAttribute('name') === name) {
+    //     Lobby.lobbyDiv.removeChild(Lobby.lobbyDiv.children[key]);
+    //     break;
+    //   }
+    // }
   }
   private static addPlayer(name: string) {
     if (Lobby.players[name]) {
       return;
       // throw new Error("Player already in lobby!");
     }
-    var player = document.createElement('DIV');
-    player.textContent = `${socket.id === name? "Вы" :"Игрок"}: ${name}`;
-    player.setAttribute('name', name);
-    Lobby.lobbyDiv.appendChild(player);
+    Lobby.lobbyDiv.prepend(`<div id="player_${name}">${name}</div>`);
+    var player = $(`#player_${name}`);
+    player.html(`${socket.id === name? "Вы" :"Игрок"}: ${name}`);
+    player.attr('name', name);
 
     Lobby.players[name] = player;
   }
@@ -84,7 +87,6 @@ class Lobby {
   private static get PlayerList(): Promise<any> {
     var resolver;
     var result = new Promise<string[]>((res,rej) => {resolver = res});
-    console.log('get player list');
     Utils.httpGetAsyncJson('/room/'+ Lobby.lobbyId, (res) => {
       resolver(res);
     });
@@ -102,9 +104,7 @@ class Lobby {
     socket.off('remove_player');
     socket.off('lobby_created');
 
-    while (Lobby.lobbyDiv.firstChild) {
-      Lobby.lobbyDiv.removeChild(Lobby.lobbyDiv.firstChild);
-    }
+    Lobby.lobbyDiv.html(``);
     Lobby.players = {};
   }
 }
