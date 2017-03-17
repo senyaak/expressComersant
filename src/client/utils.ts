@@ -18,7 +18,7 @@ module Utils {
     // button.setAttribute('i', 'mainM');
     container.append(`<button class="exit_btn">Выход</button>`);
     $(container).find(`.exit_btn`).click(() => {
-      App.State = AppStates.MENU;
+      Client.App.State = Client.AppStates.MENU;
       if(typeof callback == 'function') {
         callback();
       }
