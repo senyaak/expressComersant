@@ -5,7 +5,7 @@ module Client {
   const INNERBORDER_WIDTH = 0.3;
   const PROP_GRADES = ["У", "Ф", "О", "П"];
 
-  enum CardType {
+  export enum CardType {
     RISK,
     MAIL,
     SURPRIZE,
@@ -14,7 +14,7 @@ module Client {
     SLEEP
   };
 
-  function CardToString(type: CardType): string {
+  export function CardToString(type: CardType): string {
     switch(type) {
       case CardType.RISK: return "Риск";
       case CardType.MAIL: return "Письмо";
@@ -26,7 +26,7 @@ module Client {
     throw new TypeError();
   }
 
-  abstract class Cell {
+  export abstract class Cell {
     protected cellNumber: number;
 
     protected createRect(draw: svgjs.Element, index: number): svgjs.Element {
@@ -35,7 +35,7 @@ module Client {
     public abstract createElement(draw: svgjs.Element, index: number): svgjs.Element;
   }
 
-  class EmptyStep extends Cell {
+  export class EmptyStep extends Cell {
     private text: string;
     constructor(text: string) {
       super();
@@ -51,7 +51,7 @@ module Client {
     }
   };
 
-  class FirmaCell extends Cell {
+  export class FirmaCell extends Cell {
     private price: number;
     private dividends: number[];
     private tax: number[];
@@ -117,7 +117,7 @@ module Client {
     }
   };
 
-  class Card extends Cell {
+  export class Card extends Cell {
     private type: CardType;
     constructor(type: CardType) {
       super();
@@ -149,7 +149,7 @@ module Client {
     }
   };
 
-  class AreaCell extends Cell {
+  export class AreaCell extends Cell {
     private price;
     constructor(price: number) {
       super();
@@ -189,7 +189,7 @@ module Client {
     }
   };
 
-  class MoneyCell extends Cell {
+  export class MoneyCell extends Cell {
     private money;
     constructor(money: number) {
       super();

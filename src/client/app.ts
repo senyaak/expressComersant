@@ -2,7 +2,6 @@ module Client {
   export enum AppStates {
     MENU,
     LOBBY,
-    JOIN_LOBBY,
     GAME_LIST ,
     GAME
   }
@@ -26,11 +25,12 @@ module Client {
         case AppStates.GAME_LIST:
           App.showGameList();
           break;
-        case AppStates.JOIN_LOBBY:
-          App.showLobby(GameList.ChosenRoom);
-          break;
         case AppStates.LOBBY:
-          App.showLobby();
+          if (App.state === AppStates.GAME_LIST) {
+            App.showLobby(GameList.ChosenRoom);
+          } else {
+            App.showLobby(null);
+          }
           break;
         case AppStates.GAME:
           break;
@@ -77,6 +77,7 @@ module Client {
       App.lobby.attr('style', 'display: none;');
       App.gameList.attr('style', 'display: none;');
       App.game.attr('style', 'display: none;');
+      GameList.removeListeners();
     }
 
     public static showMenu() {
@@ -90,18 +91,6 @@ module Client {
 
     public static showLobby(roomId?: string) {
       App.lobby.attr('style', 'display: block;');
-      if(roomId) {
-        App.joinLobby(roomId);
-      } else {
-        App.createLobby();
-      }
-    }
-
-    private static createLobby() {
-      Lobby.createLobby();
-    }
-
-    private static joinLobby(roomId: string) {
       Lobby.joinLobby(roomId);
     }
   }

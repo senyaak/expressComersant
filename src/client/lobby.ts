@@ -14,17 +14,7 @@ module Client {
       Lobby.lobbyDiv = lobbyDiv;
     }
 
-    public static createLobby() {
-      socket.on('lobby_created', (lobbyId) => {
-        Lobby.lobbyId = lobbyId;
-        Lobby.joinLobby(lobbyId);
-        // FIXME
-        console.log('lobby created', lobbyId);
-      });
-      socket.emit('create_room');
-    }
-
-    public static joinLobby(roomId: string) {
+    public static joinLobby(roomId: string = null) {
       Lobby.clear();
       Lobby.lobbyId = roomId;
       // TODO get players list
@@ -35,22 +25,18 @@ module Client {
       socket.on('remove_player', (id) => {
         Lobby.removePlayer(id);
       })
-      socket.on('room_deleted', () => {
-         App.State = AppStates.MENU;
-        Lobby.removeRoom();
+      Utils.appendMainMenuButton(Lobby.lobbyDiv, () => {
+        Lobby.leaveRoom();
       });
-      socket.on('left_room', (id) => {
-        console.log('left_room');
-        Lobby.removePlayer(id);
-      });
-      Lobby.PlayerList.then((res: PlayersList) => {
-        for(var i in res.sockets) {
-          Lobby.addPlayer(i);
-        }
-        Utils.appendMainMenuButton(Lobby.lobbyDiv, () => {
-          Lobby.removeRoom();
+      if(roomId) {
+        this.PlayerList.then((list) => {
+          console.log(list)
+          for(var key in list.sockets) {
+            this.addPlayer(key);
+          }
         });
-      });
+      }
+      socket.emit("join_room", roomId);
     }
 
     private static removePlayer(name: string) {
@@ -62,14 +48,8 @@ module Client {
         delete Lobby.players[name];
         $(elem).remove();
       });
-      // for(var key in Lobby.lobbyDiv.children) {
-      //   console.log('1',Lobby.lobbyDiv.children[key]);
-      //   if(Lobby.lobbyDiv.children[key].getAttribute('name') === name) {
-      //     Lobby.lobbyDiv.removeChild(Lobby.lobbyDiv.children[key]);
-      //     break;
-      //   }
-      // }
     }
+
     private static addPlayer(name: string) {
       if (Lobby.players[name]) {
         return;
@@ -92,7 +72,7 @@ module Client {
       return result;
     }
 
-    private static removeRoom() {
+    private static leaveRoom() {
       App.State = AppStates.MENU;
       Lobby.clear();
       socket.emit('leave_room', Lobby.lobbyId);
@@ -101,7 +81,6 @@ module Client {
     private static clear() {
       socket.off('new_player');
       socket.off('remove_player');
-      socket.off('lobby_created');
 
       Lobby.lobbyDiv.html(``);
       Lobby.players = {};

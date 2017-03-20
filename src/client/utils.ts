@@ -1,14 +1,14 @@
 module Utils {
   export function withThousandSeparateDots(x) {
-      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
 
   export function httpGetAsyncJson(theUrl, callback): any {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-          callback(JSON.parse(xmlHttp.responseText));
-        }
+      if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        callback(JSON.parse(xmlHttp.responseText));
+      }
     }
     xmlHttp.open("GET", theUrl, true); // true for asynchronous
     xmlHttp.send(null);
@@ -23,6 +23,5 @@ module Utils {
         callback();
       }
     });
-
   }
 }

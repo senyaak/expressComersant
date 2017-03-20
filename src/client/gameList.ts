@@ -11,27 +11,28 @@ module Client {
 
     public static showRooms() {
       GameList.clear();
-      socket.on('new_room', (roomName) => {
-        GameList.AddRoom(roomName);
-      });
+      GameList.initListeners();
       GameList.Rooms.then((res) => {
         res.forEach((roomName) => {
-          GameList.AddRoom(roomName);
+          GameList.JoinRoom(roomName);
         });
         Utils.appendMainMenuButton(GameList.gameListDiv);
       });
     }
 
-    private static AddRoom(roomName) {
-      GameList.gameListDiv.append(`<div id="room_${roomName}"></div>`);
+    private static JoinRoom(roomName) {
+      GameList.gameListDiv.prepend(`<div id="room_${roomName}"></div>`);
       var newRoom = $(`#room_${roomName}`);
       newRoom.html(`${roomName}`);
       newRoom.attr('name', roomName);
       newRoom.click(() => {
         GameList.chosenRoom = roomName;
-        socket.emit('join_room', roomName);
-        App.State = AppStates.JOIN_LOBBY;
+        App.State = AppStates.LOBBY;
       });
+    }
+
+    private static removeRoom(roomName) {
+      $(`[name*=${roomName}]`).remove();
     }
 
     private static get Rooms(): Promise<string[]> {
@@ -48,6 +49,19 @@ module Client {
     public static clear() {
       socket.off('new_room');
       GameList.gameListDiv.html('');
+    }
+
+    private static initListeners() {
+      socket.on("remove_room", (id) => {
+        GameList.removeRoom(id);
+      });
+      socket.on('new_room', (roomName) => {
+        GameList.JoinRoom(roomName);
+      });
+    }
+    public static removeListeners() {
+      socket.off("remove_lobby");
+      socket.off('new_room');
     }
   }
 }

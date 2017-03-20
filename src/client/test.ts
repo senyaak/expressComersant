@@ -4,6 +4,10 @@ module Client {
   export var socket = io();
   var game: Game;
 
+  socket.on('test', (id) => {
+    console.log('test', id)
+  });
+
   socket.on('startGame', (gameId) => {
     game = new Game(gameId);
     socket.emit('leaveLobby', gameId, socket.id);
