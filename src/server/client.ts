@@ -1,6 +1,7 @@
 import {io} from "./app";
 import {Lobby} from "./lobby";
-enum ClientState {
+import {CreateGame} from "./ts/game";
+export enum ClientState {
   INACTIVE, LOBBY, IN_GAME
 }
 
@@ -8,9 +9,13 @@ export class Client {
   private socket: SocketIO.Socket;
   private state: ClientState;
   private lobby: Lobby;
-  private set State(state: ClientState) {
+  public set State(state: ClientState) {
     this.state = state;
   };
+  public get State(): ClientState {
+    return this.state;
+  }
+
   constructor(socket: SocketIO.Socket) {
     this.socket = socket;
     this.State = ClientState.INACTIVE
@@ -24,22 +29,27 @@ export class Client {
 
     socket.on('join_room', (id) => {
       // if already in lobby do nothing
-      if (this.lobby) {
-        return;
+      if (!this.lobby) {
+        this.lobby = new Lobby(id)
+        this.lobby.AddPlayer(socket);
+        this.State = ClientState.LOBBY;
+        this.lobby.InitReadyEvent(socket, this);
+        socket.on('leave_room', () => {
+          // if in lobby, leave
+          if (this.lobby) {
+            this.lobby.RemovePlayer(socket);
+            delete this.lobby;
+            this.State = ClientState.INACTIVE;
+          }
+        });
       }
-      this.lobby = new Lobby(id)
-      this.lobby.AddPlayer(socket);
-      this.State = ClientState.LOBBY;
-      socket.on('leave_room', () => {
-        // if in lobby, leave
-        if (this.lobby) {
-          this.lobby.RemovePlayer(socket);
-          delete this.lobby;
-          this.State = ClientState.INACTIVE;
-        }
-      });
     });
 
-
+    socket.on('create_game', (ids: string[]) => {
+      ids.forEach(() => {
+        // FIXME add Create Game function 
+        CreateGame(ids, socket);
+      });
+    });
   }
 }

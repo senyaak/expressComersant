@@ -24,4 +24,27 @@ module Utils {
       }
     });
   }
+
+  var SUCCESS_COLOR: string= "green";
+  var ERROR_COLOR: string = "red";
+
+  export function appendReadyButton(container: JQuery, socket: SocketIOClient.Socket, state: {isReady: boolean}) {
+    container.append(`<div class="setReadyState">Ready!</div>`);
+    var element = $('.setReadyState');
+    var toggle = () => {
+      if (state.isReady = !state.isReady) {
+        socket.emit('not_ready');
+        element.text("Not Ready!");
+        element.css("color", ERROR_COLOR);
+      } else {
+        socket.emit('ready');
+        element.text("Ready!");
+        element.css("color", SUCCESS_COLOR);
+      }
+    };
+    element.text("Not Ready!");
+    element.css("color", ERROR_COLOR);
+
+    element.click(toggle);
+  }
 }

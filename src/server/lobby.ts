@@ -1,4 +1,5 @@
 import {app, io} from "./app";
+import {Client, ClientState} from "./client";
 
 var LOBBY_PREFIX: string = "lobby_";
 
@@ -7,6 +8,7 @@ export class Lobby {
   private static lastIndex: number = 0;
 
   private id: number;
+  private playersReady: string[];
   public get ID(): string {
     return LOBBY_PREFIX + this.id;
   }
@@ -23,7 +25,6 @@ export class Lobby {
     var index = Lobby.rooms[this.ID].indexOf(socket.id);
     Lobby.rooms[this.ID].splice(index, 1);
     if(Lobby.rooms[this.ID].length === 0) {
-      console.log(Lobby.rooms[this.ID], this.ID);
       delete Lobby.rooms[this.ID];
       io.sockets.emit("remove_room", this.ID);
     }
@@ -37,6 +38,30 @@ export class Lobby {
     } else {
       this.id = parseInt(("" + id).replace(LOBBY_PREFIX, ""), 10);
     }
+    this.playersReady = [];
+  }
 
+  public InitReadyEvent(socket: SocketIO.Socket, client: Client) {
+    socket.on('ready', () => {
+      if (client.State === ClientState.LOBBY && this.playersReady.indexOf(socket.id) === -1) {
+        this.playersReady.push(socket.id);
+
+        if(Lobby.rooms[this.ID].length === this.playersReady.length && this.playersReady.length > 1) {
+          this.createGame();
+        }
+      }
+
+    });
+
+    socket.on('not_ready', () => {
+      var playerIndex = this.playersReady.indexOf(socket.id);
+      if (client.State === ClientState.LOBBY && playerIndex !== -1) {
+        this.playersReady.splice(playerIndex, 1);
+      }
+    });
+  }
+
+  private createGame() {
+    io.to(this.ID).emit("create_game", Lobby.rooms[this.ID]);
   }
 }

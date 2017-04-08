@@ -9,6 +9,8 @@ module Client {
     private static lobbyDiv: JQuery;
     private static lobbyId: string;
 
+    public static isReady: boolean = false;
+
     public static init(lobbyDiv: JQuery) {
       Lobby.players = {};
       Lobby.lobbyDiv = lobbyDiv;
@@ -28,6 +30,7 @@ module Client {
       Utils.appendMainMenuButton(Lobby.lobbyDiv, () => {
         Lobby.leaveRoom();
       });
+      Utils.appendReadyButton(Lobby.lobbyDiv, socket, Lobby);
       if(roomId) {
         this.PlayerList.then((list) => {
           console.log(list)
