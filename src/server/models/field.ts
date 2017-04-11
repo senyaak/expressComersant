@@ -1,6 +1,6 @@
 import {Player} from "./player";
 import {PlayerItems} from "./player";
-import {NotificationService} from "./services/notification";
+import {NotificationService} from "./../services/notification";
 
 export class Field {
   private that: Field;

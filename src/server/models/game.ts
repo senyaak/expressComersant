@@ -1,6 +1,7 @@
 import {Field, FirmaCell} from "./field";
 import {Player, PlayerItems} from "./player";
 import {NotEnoughMoneyError} from "./player";
+import {io} from "./../app";
 
 class Steps {
   private currStep: number;
@@ -36,7 +37,6 @@ export class Game {
     }
   }
 
-  /* TODO explicit counter of players*/
   public constructor(socketIds: string[]) {
     if (socketIds.length < 1) {
       throw new Error("Not enought players");
@@ -49,7 +49,7 @@ export class Game {
     });
     this.startGame();
   };
-  public addPlayer(name: string, socketId: string) {
+  private addPlayer(name: string, socketId: string) {
     if(!this.gameIsRunning) {
       this.players.push(new Player(name, this.players, socketId));
     }

@@ -1,6 +1,6 @@
 import {io} from "./app";
 import {Lobby} from "./lobby";
-import {CreateGame} from "./ts/game";
+import {Game} from "./models/game";
 export enum ClientState {
   INACTIVE, LOBBY, IN_GAME
 }
@@ -30,7 +30,13 @@ export class Client {
     socket.on('join_room', (id) => {
       // if already in lobby do nothing
       if (!this.lobby) {
-        this.lobby = new Lobby(id)
+        console.log(id, Lobby.lobbies)
+        if (id === null) {
+          this.lobby = new Lobby(id);
+          Lobby.lobbies[this.lobby.ID] = this.lobby; 
+        } else {
+          this.lobby = Lobby.lobbies[id];
+        }
         this.lobby.AddPlayer(socket);
         this.State = ClientState.LOBBY;
         this.lobby.InitReadyEvent(socket, this);
@@ -45,11 +51,11 @@ export class Client {
       }
     });
 
-    socket.on('create_game', (ids: string[]) => {
-      ids.forEach(() => {
-        // FIXME add Create Game function 
-        CreateGame(ids, socket);
-      });
-    });
+    // socket.on('join_game', (ids: string[]) => {
+    //   ids.forEach(() => {
+    //     // FIXME add Create Game function
+    //     // Game(ids, socket);
+    //   });
+    // });
   }
 }

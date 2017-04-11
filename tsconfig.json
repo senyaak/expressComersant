@@ -1,12 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es5"
+    "target": "es6"
   },
-  "files": [
-    "src/**/*.ts",
-    "typings/**/*.d.ts"
-  ],
   "filesGlob": [
+    "src/server/app.ts",
     "src/**/*.ts",
     "src/*.ts",
     "typings/**/*.d.ts",

@@ -8,11 +8,6 @@ module Client {
     console.log('test', id)
   });
 
-  socket.on('startGame', (gameId) => {
-    game = new Game(gameId);
-    socket.emit('leaveLobby', gameId, socket.id);
-  });
-
   socket.on('lobby_created', (err) => {
     if(App.State === AppStates.LOBBY)
     console.log('Lobby created. Errors:' + err);
@@ -26,5 +21,6 @@ module Client {
       $('#lobby'),
       $('#game')
     );
+    App.State = AppStates.MENU;
   };
 }

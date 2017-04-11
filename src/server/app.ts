@@ -1,4 +1,4 @@
-import {Game} from "./ts/game";
+import {Game} from "./models/game";
 import {Client} from "./client";
 import {Lobby} from "./lobby";
 import * as express from 'express';
@@ -53,3 +53,5 @@ io.on('connection', (socket: SocketIO.Socket) => {
   clients.push(new Client(socket));
   // io.sockets.in('').clients((error,clients) => {});
 });
+
+export var Games: {[key:string]: Game} = {};

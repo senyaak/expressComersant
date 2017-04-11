@@ -1,17 +1,16 @@
 module Client {
   export class Game {
-    private GameId: string;
-    private mainElement: svgjs.Element;
-    private nextActionBtn: svgjs.Element;
+    private static mainElement: svgjs.Element;
+    private static nextActionBtn: svgjs.Element;
 
-    public constructor(gameID: string) {
-      this.GameId = gameID;
+    private static playerNumber: number;
 
-      this.mainElement = this.initField();
-      this.nextActionBtn = this.initActionBtn();
+    public static InitGame() {
+      Game.mainElement = Game.initField();
+      Game.nextActionBtn = Game.initActionBtn();
     }
 
-    private initField(): svgjs.Element {
+    private static initField(): svgjs.Element {
       /*create field*/
       var mainSvg: svgjs.Element = SVG('game').size(
         9000,//window.innerWidth,
@@ -26,13 +25,17 @@ module Client {
       return mainGroup;
     }
 
-    private initActionBtn(): svgjs.Element {
+    private static initActionBtn(): svgjs.Element {
       var nextActionBtn = this.mainElement.rect(20,20).y(window.innerHeight- 30);
       nextActionBtn.node.onclick = () => {
         console.log("CLICKED");
         socket.emit('nextStep')
       };
       return nextActionBtn;
+    }
+
+    public static StartGame(playersCount: number, playerNumber: number) {
+      Game.playerNumber = playerNumber;
     }
   }
 }

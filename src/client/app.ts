@@ -33,6 +33,7 @@ module Client {
           }
           break;
         case AppStates.GAME:
+          App.game.attr('style', 'display: block;');
           break;
         default: throw new Error();
       }
@@ -65,11 +66,11 @@ module Client {
       Lobby.init(App.lobby);
       //=============game===================//
       App.game = game;
-
+      Game.InitGame();
 
       // ======== done ===============//
       App.isReady = true;
-
+      App.hideAll();
     }
 
     private static hideAll() {
@@ -92,6 +93,11 @@ module Client {
     public static showLobby(roomId?: string) {
       App.lobby.attr('style', 'display: block;');
       Lobby.joinLobby(roomId);
+    }
+
+    public static StartGame(playersCount: number, playerNumber: number) {
+      App.State = AppStates.GAME;
+      Game.StartGame(playersCount, playerNumber);
     }
   }
 }

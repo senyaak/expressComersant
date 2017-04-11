@@ -1,10 +1,13 @@
 import {app, io} from "./app";
 import {Client, ClientState} from "./client";
+import {Game} from "./models/game";
+import {Games} from "./app";
 
 var LOBBY_PREFIX: string = "lobby_";
 
 export class Lobby {
   public static rooms: {[key:string]: string[]} = {};
+  public static lobbies: {[key:string]: Lobby} = {};
   private static lastIndex: number = 0;
 
   private id: number;
@@ -31,13 +34,9 @@ export class Lobby {
   }
 
   constructor(id: string) {
-    if(!id) {
-      this.id = ++Lobby.lastIndex;
-      Lobby.rooms[this.ID] = [];
-      io.sockets.emit('new_room', this.ID);
-    } else {
-      this.id = parseInt(("" + id).replace(LOBBY_PREFIX, ""), 10);
-    }
+    this.id = ++Lobby.lastIndex;
+    Lobby.rooms[this.ID] = [];
+    io.sockets.emit('new_room', this.ID);
     this.playersReady = [];
   }
 
@@ -45,12 +44,13 @@ export class Lobby {
     socket.on('ready', () => {
       if (client.State === ClientState.LOBBY && this.playersReady.indexOf(socket.id) === -1) {
         this.playersReady.push(socket.id);
-
+        console.log(this.playersReady)
+        console.log("Ready", Lobby.rooms[this.ID].length, this.playersReady.length);
         if(Lobby.rooms[this.ID].length === this.playersReady.length && this.playersReady.length > 1) {
-          this.createGame();
+          console.log("start game");
+          this.createGame(Lobby.rooms[this.ID].indexOf(socket.id));
         }
       }
-
     });
 
     socket.on('not_ready', () => {
@@ -61,7 +61,12 @@ export class Lobby {
     });
   }
 
-  private createGame() {
-    io.to(this.ID).emit("create_game", Lobby.rooms[this.ID]);
+  private createGame(playerNumber: number) {
+    if (Games[this.ID]) {
+      throw new Error("Game already exists");
+    }
+
+    Games[this.ID] = new Game(Lobby.rooms[this.ID]);
+    io.to(this.ID).emit("join_game", Lobby.rooms[this.ID]);
   }
 }

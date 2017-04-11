@@ -3,11 +3,14 @@ var clean = require('gulp-clean');
 var ts = require('gulp-typescript');
 var server = require('gulp-develop-server');
 var tsConfServer = {
-  target: 'es5',
+  target: 'es6',
+  module: 'commonjs',
+  moduleResolution: 'node',
   noImplicitAny: false
 };
 var tsConfClient = {
-  target: 'es5',
+  target: 'es6',
+  moduleResolution: "node",
   noImplicitAny: false,
   out: 'test.js'
 };
