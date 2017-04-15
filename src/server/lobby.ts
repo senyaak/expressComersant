@@ -18,11 +18,11 @@ export class Lobby {
   public AddPlayer(socket: SocketIO.Socket) {
     socket.join(this.ID);
     Lobby.rooms[this.ID].push(socket.id);
-    io.to(this.ID).emit('new_player', socket.id);
+    io.to(this.ID).emit("new_player", socket.id);
   };
 
   public RemovePlayer(socket: SocketIO.Socket) {
-    io.to(this.ID).emit('remove_player', socket.id);
+    io.to(this.ID).emit("remove_player", socket.id);
     socket.leave(this.ID);
 
     var index = Lobby.rooms[this.ID].indexOf(socket.id);
@@ -36,12 +36,12 @@ export class Lobby {
   constructor(id: string) {
     this.id = ++Lobby.lastIndex;
     Lobby.rooms[this.ID] = [];
-    io.sockets.emit('new_room', this.ID);
+    io.sockets.emit("new_room", this.ID);
     this.playersReady = [];
   }
 
   public InitReadyEvent(socket: SocketIO.Socket, client: Client) {
-    socket.on('ready', () => {
+    socket.on("ready", () => {
       if (client.State === ClientState.LOBBY && this.playersReady.indexOf(socket.id) === -1) {
         this.playersReady.push(socket.id);
         console.log(this.playersReady)
@@ -53,7 +53,7 @@ export class Lobby {
       }
     });
 
-    socket.on('not_ready', () => {
+    socket.on("not_ready", () => {
       var playerIndex = this.playersReady.indexOf(socket.id);
       if (client.State === ClientState.LOBBY && playerIndex !== -1) {
         this.playersReady.splice(playerIndex, 1);
@@ -67,6 +67,9 @@ export class Lobby {
     }
 
     Games[this.ID] = new Game(Lobby.rooms[this.ID]);
-    io.to(this.ID).emit("join_game", Lobby.rooms[this.ID]);
+    io.to(this.ID).emit("join_game", Lobby.rooms[this.ID].length, playerNumber);
+
+    delete Lobby.rooms[this.ID];
+    delete Lobby.lobbies[this.ID];
   }
 }

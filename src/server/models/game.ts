@@ -24,6 +24,8 @@ class Steps {
 }
 
 export class Game {
+  public static Games: Game[] = [];
+
   private field: Field;
   private currentPlayer: number;
   private players: Player[];
@@ -48,7 +50,10 @@ export class Game {
       this.addPlayer(`Player${i}`, id);
     });
     this.startGame();
+
+    Game.Games.push(this);
   };
+
   private addPlayer(name: string, socketId: string) {
     if(!this.gameIsRunning) {
       this.players.push(new Player(name, this.players, socketId));
@@ -164,6 +169,17 @@ export class Game {
   public getPlayerInfo() {
     return `${this.getCurrPlayer().getName()}, Pos:${this.getCurrPlayer().getPosition()}, Props:${this.getCurrPlayer().getPropertiesList()}, Money:${this.getCurrPlayer().getBallance()}`;
   }
+
+
+  public destroy() {
+    this.players.forEach((player: Player) => {
+      io.to(player.SocketId).emit('leave_game');
+    });
+
+    var index = Game.Games.indexOf(this);
+    delete Game.Games[index];
+  }
+
 }
 
 

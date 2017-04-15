@@ -13,6 +13,14 @@ module Client {
     console.log('Lobby created. Errors:' + err);
   });
 
+  socket.on('leave_game', (err) => {
+    if (App.State === AppStates.GAME) {
+      // TODO implement some popup
+      alert("Player has left the game...");
+      App.State = AppStates.MENU;
+    }
+  });
+
   // init app class
   window.onload = () => {
     App.initApp(

@@ -19,6 +19,12 @@ export class Player {
   private socketId: string;
   private items: PlayerItems[];
   private isRacketir: number;
+
+  public get SocketId() {
+    return this.socketId;
+  }
+
+
   /* TODO add: Status(ENUM: racket) / if racket remove sequrity
    *           credit: {remainingTime: number, credit}
    *           CollectableItems: {ENUM: "Г(buy city firma)", "Free from TAX-Visit", "Anti-racket"}[]

@@ -8,7 +8,9 @@ export enum ClientState {
 export class Client {
   private socket: SocketIO.Socket;
   private state: ClientState;
-  private lobby: Lobby;
+  private lobbyId: string;
+  private game: Game;
+
   public set State(state: ClientState) {
     this.state = state;
   };
@@ -22,40 +24,41 @@ export class Client {
 
     socket.on('disconnect', () => {
       /// leave lobby if joined
-      if (this.lobby) {
-        this.lobby.RemovePlayer(socket);
+      if (this.Lobby) {
+        this.Lobby.RemovePlayer(socket);
+      }
+
+      if (this.game) {
+        this.game.destroy();
       }
     });
 
     socket.on('join_room', (id) => {
       // if already in lobby do nothing
-      if (!this.lobby) {
-        console.log(id, Lobby.lobbies)
+      if (!this.Lobby) {
         if (id === null) {
-          this.lobby = new Lobby(id);
-          Lobby.lobbies[this.lobby.ID] = this.lobby; 
+          var lobby =  new Lobby(id);
+          this.lobbyId = lobby.ID;
+          Lobby.lobbies[this.lobbyId] = lobby;
         } else {
-          this.lobby = Lobby.lobbies[id];
+          this.lobbyId = id;
         }
-        this.lobby.AddPlayer(socket);
+
+        this.Lobby.AddPlayer(socket);
         this.State = ClientState.LOBBY;
-        this.lobby.InitReadyEvent(socket, this);
+        this.Lobby.InitReadyEvent(socket, this);
         socket.on('leave_room', () => {
           // if in lobby, leave
-          if (this.lobby) {
-            this.lobby.RemovePlayer(socket);
-            delete this.lobby;
+          if (this.Lobby) {
+            this.Lobby.RemovePlayer(socket);
             this.State = ClientState.INACTIVE;
           }
         });
       }
     });
+  }
 
-    // socket.on('join_game', (ids: string[]) => {
-    //   ids.forEach(() => {
-    //     // FIXME add Create Game function
-    //     // Game(ids, socket);
-    //   });
-    // });
+  private get Lobby() {
+    return Lobby.lobbies[this.lobbyId];
   }
 }
