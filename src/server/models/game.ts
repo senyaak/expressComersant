@@ -33,13 +33,19 @@ export class Game {
   private stepsObject: Steps;
   private gameId: string;
 
+  private roomId: string;
+
+  private get CurrentPlayerSocket() {
+    return io.to(this.players[this.currentPlayer].SocketId);
+  }
+
   public set GameId(value: string) {
     if(!this.gameId) {
       this.gameId = value;
     }
   }
 
-  public constructor(socketIds: string[]) {
+  public constructor(socketIds: string[], roomId) {
     if (socketIds.length < 1) {
       throw new Error("Not enought players");
     }
@@ -52,16 +58,32 @@ export class Game {
     this.startGame();
 
     Game.Games.push(this);
+
+    // TODO init socket events
+    this.roomId = roomId;
+    // io.to(this.).on("", this.nextAction);
   };
 
   private addPlayer(name: string, socketId: string) {
     if(!this.gameIsRunning) {
       this.players.push(new Player(name, this.players, socketId));
+
+      // TODO init possible players actions
+      io.sockets.connected[socketId].on("nextStep", () => {
+        console.log("next step")
+        this.nextAction(socketId);
+      });
+      io.sockets.connected[socketId].on("trade", (params) => {
+        console.log("Try to sell card or property")
+        // TODO implement method
+      });
     }
   }
+
   public startGame() {
     this.gameIsRunning = true;
     this.currentPlayer = 0;
+    this.CurrentPlayerSocket.emit("newTurn");
   };
 
   protected getCurrPlayer(): Player {
@@ -81,29 +103,33 @@ export class Game {
     }
   };
   public nextAction(playerSocket: string, action?: Function): void {
+    var currentPlayer = this.currentPlayer;
+
     try {
       if(playerSocket === this.players[this.currentPlayer].getSocket()) {
         let currStep = this.stepsObject.getStep();
+        console.log(currStep)
+
         if(currStep === 1) {
-          this.playerAction(() => {
-            let currPlayer = this.getCurrPlayer();
-            console.log(`Player: ${currPlayer.getName()} Balance: ${currPlayer.getBallance()}`);
-          });
+          this.prepareDices();
         } else if(currStep === 2){
           this.playerRollDice();
+
         } else if(currStep === 3) {
           this.playerEndTurn();
         }
         this.stepsObject.nextStep();
       } else {
         /* TODO new error class*/
-        throw Error("WWrong Player");
+        throw Error("Wrong Player");
       }
     } catch(e) {
       if(e instanceof NotEnoughMoneyError) {
         // this.getCurrPlayer().playerLose
         this.field.removePlayer(this.currentPlayer);
         this.players.splice(this.currentPlayer, 1);
+      } else if(e.message === "Wrong Player") {
+        console.log("Wrong Player");
       }
     }
   };
@@ -119,12 +145,15 @@ export class Game {
     return this.stepsObject.getStep();
   };
 
-  private playerAction(callback) { /* what to do if u have Prop/Events */
+  private prepareDices() { /* what to do if u have Prop/Events */
     var currPlayer = this.getCurrPlayer();
     var currField = this.field[currPlayer.getPosition()];
     if (currField instanceof FirmaCell && (<FirmaCell>currField).isStateProp()) {
+      // add Г if u stood on gavermant property cell
       currPlayer.addItem(PlayerItems.purchaseAllowance);
     } else if(currPlayer.haveToRest()) {
+      // skip turn if player have to
+      // TODO emit event with notification
       this.stepsObject.resetSteps();
       this.playerEndTurn();
     }
@@ -138,8 +167,12 @@ export class Game {
         currPlayer.setPosition(0);
       }
     }
+    // notify clients about new position
+    io.to(this.roomId).emit("updatePlayerPosition", this.players[this.currentPlayer]);
+
     try {
       this.field.callEvent(currPlayer);
+      // TODO emit event
     } catch (e) {
       if(e instanceof NotEnoughMoneyError) {
         /* TODO player loose */
@@ -149,9 +182,11 @@ export class Game {
     }
   };
   private playerEndTurn() {
+    this.CurrentPlayerSocket.emit("endTurn");
     if(++this.currentPlayer >= this.players.length) {
       this.currentPlayer = 0;
     }
+    this.CurrentPlayerSocket.emit("newTurn");
   };
   public purchaseProp() {
     var currPlayer = this.getCurrPlayer();

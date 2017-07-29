@@ -30,7 +30,9 @@ export class Lobby {
     if(Lobby.rooms[this.ID].length === 0) {
       delete Lobby.rooms[this.ID];
       io.sockets.emit("remove_room", this.ID);
+      // FIXME - create room, leave, create again
     }
+
   }
 
   constructor(id: string) {
@@ -66,8 +68,11 @@ export class Lobby {
       throw new Error("Game already exists");
     }
 
-    Games[this.ID] = new Game(Lobby.rooms[this.ID]);
-    io.to(this.ID).emit("join_game", Lobby.rooms[this.ID].length, playerNumber);
+    Games[this.ID] = new Game(Lobby.rooms[this.ID], this.ID);
+    io.to(this.ID).emit("join_game", Lobby.rooms[this.ID]);
+
+
+    console.log("rooms", io.sockets.adapter.rooms[this.ID]);
 
     delete Lobby.rooms[this.ID];
     delete Lobby.lobbies[this.ID];

@@ -1,9 +1,9 @@
 module Client {
-  const CELL_WIDTH = 90;
-  const CELL_HEIGHT = 125;
-  const LINE_HEIGHT = 10;
-  const INNERBORDER_WIDTH = 0.3;
-  const PROP_GRADES = ["У", "Ф", "О", "П"];
+  export const CELL_WIDTH = 90;
+  export const CELL_HEIGHT = 125;
+  export const LINE_HEIGHT = 10;
+  export const INNERBORDER_WIDTH = 0.3;
+  export const PROP_GRADES = ["У", "Ф", "О", "П"];
 
   export enum CardType {
     RISK,

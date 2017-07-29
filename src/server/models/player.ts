@@ -1,9 +1,9 @@
 import {Field} from "./field";
 
 export enum PlayerItems {
-   purchaseAllowance,
-   sequrityCard,
-   freeTax
+  purchaseAllowance,
+  sequrityCard,
+  freeTax
 }
 
 export class Player {
@@ -31,7 +31,12 @@ export class Player {
    *           events: {event: Function(MB), remainTurns: number}[]
    */
   constructor(name: string, allPlayers: Player[], socket: string) {
-    this.allPlayers = allPlayers;
+    // this.allPlayers = allPlayers;
+    // avoid a serialisation af all player.
+    Object.defineProperty(this, "allPlayers", {
+        enumerable: false,
+        value: allPlayers
+    });
     this.name = name;
     this.position = 0;
     this.rest = false;

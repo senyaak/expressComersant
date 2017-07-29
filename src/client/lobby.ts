@@ -27,11 +27,11 @@ module Client {
       socket.on('remove_player', (id) => {
         Lobby.removePlayer(id);
       })
-      socket.on('join_game', (playersCount, playerNumber) => {
+      socket.on('join_game', (players) => {
         socket.off('new_player');
         socket.off('remove_player');
         socket.off('join_game');
-        App.StartGame(playersCount, playerNumber);
+        App.StartGame(players);
       })
 
 

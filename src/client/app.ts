@@ -6,7 +6,6 @@ module Client {
     GAME
   }
 
-
   export class App {
     private static mainMenu: JQuery;
     private static lobby: JQuery;
@@ -95,9 +94,9 @@ module Client {
       Lobby.joinLobby(roomId);
     }
 
-    public static StartGame(playersCount: number, playerNumber: number) {
+    public static StartGame(players: string[]) {
       App.State = AppStates.GAME;
-      Game.StartGame(playersCount, playerNumber);
+      Game.StartGame(players);
     }
   }
 }
