@@ -11,10 +11,12 @@
     "gulp-connect": "^5.0.0",
     "gulp-develop-server": "^0.5.2",
     "gulp-livereload": "^3.8.1",
-    "gulp-typescript": "^2.13.6"
+    "gulp-typescript": "^2.13.6",
+    "less": "^2.7.2"
   },
   "dependencies": {
     "express": "^4.14.0",
+    "gulp-less": "^3.3.2",
     "jquery": "^3.2.0",
     "socket.io": "^1.5.0",
     "svgjs": "^2.3.6"

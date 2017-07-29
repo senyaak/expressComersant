@@ -2,6 +2,9 @@ var gulp = require('gulp');
 var clean = require('gulp-clean');
 var ts = require('gulp-typescript');
 var server = require('gulp-develop-server');
+var less = require('gulp-less');
+var path = require('path');
+
 var tsConfServer = {
   target: 'es6',
   module: 'commonjs',
@@ -17,7 +20,7 @@ var tsConfClient = {
 var tsProjectServer = ts.createProject('tsconfig.json', tsConfServer);
 // var tsProjectClient = ts.createProject('tsconfig.json', tsConfClient);
 
-gulp.task('default', ['public', 'compile:client'], function () {
+gulp.task('default', ['public'], function () {
   return;
 });
 
@@ -36,7 +39,7 @@ gulp.task('watch', ['default'], function () {
   server.listen({path: './built/server/app.js'});
   gulp.watch(['./app.js'], server.restart);
   var watcher = gulp.watch(
-    ['src/**/*.ts', 'public/**/*'],
+    ['src/**/*', 'public/**/*'],
     {debounceDelay: 1500},
     ['server:restart'],
     server.restart
@@ -51,11 +54,19 @@ gulp.task('server:restart', ['default'], function () {
 });
 
 gulp.task('clean', function () {
-  return gulp.src('built/**/*', {read: false})
-    .pipe(clean());
+  return gulp.src('built', {read: false})
+    .pipe(clean({force: true}));
 });
 
-gulp.task('public', ['clean'], function () {
+gulp.task('public', ['less'], function () {
   return gulp.src('./public/**/*')
   .pipe(gulp.dest('./built'));
+});
+
+gulp.task('less', [ 'compile:client'], function () {
+  return gulp.src('./src/*.less')
+    .pipe(less({
+      paths: [ path.join(__dirname, 'less', 'includes') ]
+    }))
+    .pipe(gulp.dest('./built/client'));
 });
