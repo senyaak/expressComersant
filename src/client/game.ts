@@ -1,5 +1,21 @@
 module Client {
+  enum TurnState {
+    start,
+    roll,
+    finish,
+  };
+
+  function StateToString(state: TurnState) {
+    console.log("StateToString", state);
+    switch(state) {
+      case TurnState.start: return "Start";
+      case TurnState.roll: return "Roll";
+      case TurnState.finish: return "Finish";
+    }
+  }
+
   export class Game {
+
     private static mainElement: svgjs.Element;
     private static absoluteElement: JQuery;
     private static playersInfo: PlayerInfo;
@@ -7,6 +23,7 @@ module Client {
     private static players: Player[];
     private static playerNumber: number;
     private static playerCount: number;
+    private static turnState: any;
 
     public static InitGame() {
       $("#game").css("width", "1px");
@@ -36,22 +53,24 @@ module Client {
       return mainGroup;
     }
 
+    private static InitBuyButton
+
     private static initActionBtn(): JQuery {
+      this.turnState = TurnState.finish;
+
+      var nextStep = () => {
+        socket.emit("nextStep");
+        nextActionBtn.off("click", nextStep);
+        setTimeout(() => {
+          nextActionBtn.on("click", nextStep);
+        }, 1000);
+      };
+
       this.absoluteElement.append(`<div id="next-step"></div>`);
       var nextActionBtn = $("#next-step");
-      nextActionBtn.css("background-color", "grey");
-      nextActionBtn.append(`<div class="label">waiting...</div>`);
-      nextActionBtn.css("bottom", "20px");
-      nextActionBtn.css("width", "200px");
-      nextActionBtn.css("display", "inline");
-      nextActionBtn.css("position", "absolute");
-      nextActionBtn.find(".label").css("padding", "5px");
+      nextActionBtn.append(`<div id="next-button" class="label">waiting...</div>`);
 
-      nextActionBtn.on("click", () => {
-        console.log("CLICKED");
-        socket.emit("nextStep")
-      });
-
+      nextActionBtn.on("click", nextStep);
       return nextActionBtn;
     }
 
@@ -73,18 +92,24 @@ module Client {
 
     private static InitEvents() {
       socket.on("updatePlayerPosition", (player: PlayerStats) => {
-        // TODO update players
-        console.log(player);
         Game.players[player.id].Position = player.position;
       });
 
+      socket.on("updatePlayer", (player: PlayerStats) => {
+        Game.players[player.id].PlayerStats = player;
+      });
       socket.on("newTurn", () => {
-        this.nextActionBtn.css("background-color", "green");
+        this.nextActionBtn.find("#next-button").css("background-color", "green");
         this.nextActionBtn.find(".label").html("next");
       });
       socket.on("endTurn", () => {
-        this.nextActionBtn.css("background-color", "grey");
+        this.nextActionBtn.find("#next-button").css("background-color", "grey");
         this.nextActionBtn.find(".label").html("waiting...");
+      });
+
+      // TODO turn phase event
+      socket.on("set_turn_state", () => {
+        // TODO set turn state
       });
     }
   }

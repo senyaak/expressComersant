@@ -30,7 +30,10 @@ module Client {
     protected cellNumber: number;
 
     protected createRect(draw: svgjs.Element, index: number): svgjs.Element {
-      return draw.rect(CELL_WIDTH, CELL_HEIGHT);
+      var mainElement = draw.group();
+      mainElement.transform({x: (CELL_WIDTH+1)*index});
+      mainElement.rect(CELL_WIDTH, CELL_HEIGHT).fill('#fff').stroke('#000');
+      return mainElement;
     };
     public abstract createElement(draw: svgjs.Element, index: number): svgjs.Element;
   }
@@ -42,9 +45,7 @@ module Client {
       this.text = text;
     }
     public createElement(draw: svgjs.Element, index: number): svgjs.Element {
-      var mainElement = draw.group();
-      mainElement.transform({x: (CELL_WIDTH+1)*index});
-      var rect: any = this.createRect(mainElement, index).fill('#fff').stroke('#000');
+      var mainElement = this.createRect(draw, index);
       mainElement.text(this.text).y(CELL_HEIGHT/2 - 10).x(CELL_WIDTH/2).font({anchor: 'middle'});
       this.cellNumber = index;
       return mainElement;
@@ -58,6 +59,8 @@ module Client {
     private name: string;
     private upgrade: number;
     private gos: boolean;
+    // TODO add groups to define color of the cell
+    // private group;
     constructor(price: number, dividends: number[], tax: number[], name: string, upgrade: number, gos: boolean = false) {
       super();
       this.price = price;
@@ -70,9 +73,7 @@ module Client {
     public createElement(draw: svgjs.Element, index: number): svgjs.Element {
       this.cellNumber = index;
       // init main element
-      var mainElement = draw.group();
-      mainElement.transform({x: (CELL_WIDTH+1)*index});
-      var rect = this.createRect(mainElement, index).fill('#fff').stroke('#000');
+      var mainElement = this.createRect(draw, index);
 
       // init header: size 4x LINE_HEIGHT
       var topElm = mainElement.group();
@@ -127,9 +128,7 @@ module Client {
     public createElement(draw: svgjs.Element, index: number): svgjs.Element {
       this.cellNumber = index;
       // init main element
-      var mainElement = draw.group();
-      mainElement.transform({x: (CELL_WIDTH+1)*index});
-      var rect = this.createRect(mainElement, index).fill('#fff').stroke('#000');
+      var mainElement = this.createRect(draw, index);
       // init footer: size 3x LINE_HEIGHT
       var footerBP = CELL_HEIGHT-(LINE_HEIGHT*3);
       mainElement.line(0, footerBP, CELL_WIDTH, footerBP).stroke({width: INNERBORDER_WIDTH});
@@ -158,9 +157,8 @@ module Client {
     public createElement(draw: svgjs.Element, index: number): svgjs.Element {
       this.cellNumber = index;
       // init main element
-      var mainElement = draw.group();
-      mainElement.transform({x: (CELL_WIDTH+1)*index});
-      var rect = this.createRect(mainElement, index).fill('#fff').stroke('#000');
+      var mainElement = this.createRect(draw, index);
+
       // init footer: size 5x LINE_HEIGHT
       var footerBP = CELL_HEIGHT - (LINE_HEIGHT*5);
       var lineMargin = 4;
@@ -198,9 +196,7 @@ module Client {
     public createElement(draw: svgjs.Element, index: number): svgjs.Element {
       this.cellNumber = index;
       // init main element
-      var mainElement = draw.group();
-      mainElement.transform({x: (CELL_WIDTH+1)*index});
-      var rect = this.createRect(mainElement, index).fill('#fff').stroke('#000');
+      var mainElement = this.createRect(draw, index);
 
       if(this.money> 0) {
         this.positiv(mainElement);

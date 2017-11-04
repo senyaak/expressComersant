@@ -5,6 +5,14 @@ module Client {
     freeTax
   }
 
+  function PlayerItemToString(value: PlayerItems) {
+    switch(value) {
+      case PlayerItems.purchaseAllowance: return "Allow purchase";
+      case PlayerItems.sequrityCard: return "Sequrity";
+      case PlayerItems.freeTax: return "Taxfree";
+    }
+  }
+
   export interface PlayerStats {
     name: string;
     position: number;
@@ -25,7 +33,7 @@ module Client {
 
     private money: number;
     private properies: string[];
-    private cards: string[];
+    private cards: PlayerItems[];
     private position: number;
     private info: PlayerInfo;
 
@@ -41,30 +49,25 @@ module Client {
       return this.getPropertyAsString(this.properies);
     };
 
+    private get CardsAsStringArray() {
+      return this.cards.map((card) => {
+        return PlayerItemToString(card);
+      })
+    }
+
     public get Cards() {
-      return this.getPropertyAsString(this.cards);
+      return this.getPropertyAsString(this.CardsAsStringArray);
     };
 
     private getPropertyAsString(value: string[]) {
       var result = "";
-      if (value.length > 1) {
+      if (value.length < 1) {
         result = " --- ";
       } else {
         value.join(", ");
       }
       return result;
     }
-
-    // FIXME remove
-    public get Info() {
-      var result = "";
-
-      result += `Money: ${this.money}. `;
-      result += `Properies: ${this.Properties}`;
-      result += `Cards: ${this.cards.join(", ")}. `;
-
-      return result;
-    };
 
     constructor(playerCounter: number, numberOfThePlayer: number, container: svgjs.Element, fixedContainer: JQuery) {
       this.elmGroup = container.group();
@@ -103,14 +106,22 @@ module Client {
         this.elmGroup.animate().move(value + value*CELL_WIDTH + 10, y);
       }
       this.position = value
+    }
 
+    public set PlayerStats (value: PlayerStats) {
+      this.PlayerStats = value;
+      this.cards = value.items;
+      // this.cards = value.items;
     }
   }
 
   export class PlayerInfo {
     private mainContainer: JQuery;
+    private playerNumber: number;
 
     constructor(container: JQuery, player: Player, isPlayer?: boolean) {
+      this.playerNumber = player.Number;
+
       this.mainContainer = container.append(`
         <button class="${isPlayer?"player-button":""}" id="player-button-toggler-${player.Number}">
           Player ${player.Number}
@@ -118,11 +129,14 @@ module Client {
 
         <div id="player-info-${player.Number}">
           <div>
-            <span>Money: ${player.Money}</span>
+            Name: <span class="info-name">Player ${player.Number}</span>
+          </div>
+          <div>
+            Money: <span class="info-money">${player.Money}</span>
             <br>
-            <span>Properties: ${player.Properties}</span>
+            Properties: <span class="info-properties">${player.Properties}</span>
             <br>
-            <span>Cards: ${player.Cards}</span>
+            Cards: <span class="info-cards">${player.Cards}</span>
           </div>
         </div>
       `);
@@ -147,7 +161,13 @@ module Client {
         right: "110px",
         bottom: `2%`,
       });
+    }
 
+    public set Player(value: Player) {
+      this.mainContainer.find("span.info-name").html(`Player ${value.Number}`);
+      this.mainContainer.find("span.info-money").html(`${value.Money}`);
+      this.mainContainer.find("span.info-properties").html(`${value.Properties}`);
+      this.mainContainer.find("span.info-cards").html(`${value.Cards}`);
     }
   }
 }

@@ -77,6 +77,18 @@ export class Game {
         console.log("Try to sell card or property")
         // TODO implement method
       });
+
+      io.sockets.connected[socketId].on(`buy_property`, () => {
+        if(this.buyCell(socketId)) {
+          // TODO get cell name
+          var name = "";// this.field.
+          io.to(socketId).emit(`notification`, `You bought - ${name}`);
+        }
+      });
+      // TODO impl events: [buy, upgrade, credit.....]
+      // io.sockets.connected[socketId].on("", () => {
+      //
+      // });
     }
   }
 
@@ -114,10 +126,10 @@ export class Game {
           this.prepareDices();
         } else if(currStep === 2){
           this.playerRollDice();
-
         } else if(currStep === 3) {
           this.playerEndTurn();
         }
+        io.to(playerSocket).emit("set_turn_state", currStep);
         this.stepsObject.nextStep();
       } else {
         /* TODO new error class*/
@@ -188,6 +200,7 @@ export class Game {
     }
     this.CurrentPlayerSocket.emit("newTurn");
   };
+
   public purchaseProp() {
     var currPlayer = this.getCurrPlayer();
     var position = this.getCurrPlayer().getPosition()
@@ -200,11 +213,6 @@ export class Game {
   public isGameRunning(): boolean {
     return this.gameIsRunning;
   };
-  /* for debugging */
-  public getPlayerInfo() {
-    return `${this.getCurrPlayer().getName()}, Pos:${this.getCurrPlayer().getPosition()}, Props:${this.getCurrPlayer().getPropertiesList()}, Money:${this.getCurrPlayer().getBallance()}`;
-  }
-
 
   public destroy() {
     this.players.forEach((player: Player) => {
@@ -214,7 +222,6 @@ export class Game {
     var index = Game.Games.indexOf(this);
     delete Game.Games[index];
   }
-
 }
 
 
