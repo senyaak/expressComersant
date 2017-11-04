@@ -6,8 +6,9 @@
     "src/server/app.ts",
     "src/**/*.ts",
     "src/*.ts",
-    "typings/**/*.d.ts",
-    "!node_modules"
+    "!node_modules",
+    "node_modules/@types/**/*.d.ts",
+    "node_modules/svgjs/*.d.ts"
   ],
   "compileOnSave": false,
   "buildOnSave": false

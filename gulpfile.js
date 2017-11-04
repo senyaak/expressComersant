@@ -20,17 +20,26 @@ var tsConfClient = {
 var tsProjectServer = ts.createProject('tsconfig.json', tsConfServer);
 // var tsProjectClient = ts.createProject('tsconfig.json', tsConfClient);
 
+var globalTypes = [
+  'typings/**/*.d.ts',
+  'node_modules/@types/**/*.d.ts',
+]
+
 gulp.task('default', ['public'], function () {
   return;
 });
 
 gulp.task('compile:server', ['clean'], function () {
-  return gulp.src(['src/server/**/*.ts', 'typings/index.d.ts'])
+  return gulp.src(globalTypes.concat([
+    'src/server/**/*.ts',
+  ]))
     .pipe(ts(tsConfServer))
     .js.pipe(gulp.dest('built/server/'));
 });
 gulp.task('compile:client', ['compile:server'], function () {
-  return gulp.src(['src/client/**/*.ts', 'typings/index.d.ts'])
+  return gulp.src(globalTypes.concat([
+    'src/client/**/*.ts',
+  ]))
   .pipe(ts(tsConfClient))
   .js.pipe(gulp.dest('built/client/'));
 });

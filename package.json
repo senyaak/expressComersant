@@ -5,14 +5,23 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
+    "@types/express": "^4.0.37",
+    "@types/express-serve-static-core": "^4.0.53",
+    "@types/jquery": "^3.2.12",
+    "@types/mime": "^2.0.0",
+    "@types/node": "^8.0.28",
+    "@types/serve-static": "^1.7.32",
+    "@types/socket.io": "^1.4.30",
+    "@types/socket.io-client": "^1.4.30",
     "browser-sync": "^2.15.0",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
     "gulp-connect": "^5.0.0",
     "gulp-develop-server": "^0.5.2",
     "gulp-livereload": "^3.8.1",
-    "gulp-typescript": "^2.13.6",
-    "less": "^2.7.2"
+    "gulp-typescript": "^3.2.2",
+    "less": "^2.7.2",
+    "typescript": "^2.5.2"
   },
   "dependencies": {
     "express": "^4.14.0",

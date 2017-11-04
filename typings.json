@@ -2,14 +2,6 @@
   "name": "expressTest",
   "dependencies": {},
   "globalDependencies": {
-    "express": "registry:dt/express#4.0.0+20160708185218",
-    "express-serve-static-core": "registry:dt/express-serve-static-core#4.0.0+20160928124223",
-    "jquery": "registry:dt/jquery#1.10.0+20170310222111",
-    "mime": "registry:dt/mime#0.0.0+20160316155526",
-    "node": "registry:dt/node#6.0.0+20160928143418",
-    "serve-static": "registry:dt/serve-static#0.0.0+20160606155157",
-    "socket.io": "registry:dt/socket.io#1.4.4+20160909205835",
-    "socket.io-client": "registry:dt/socket.io-client#1.4.4+20160317120654",
     "svg.js": "registry:dt/svg.js#0.0.0+20160510002910"
   }
 }
